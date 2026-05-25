@@ -89,30 +89,30 @@ def render_tags(tags: list[str]) -> str:
 
 
 def normalize_people(value: object) -> list[str]:
-  if isinstance(value, list):
-    return [str(item).strip() for item in value if str(item).strip()]
-  if value is None:
-    return []
-  text = str(value).strip()
-  if not text:
-    return []
-  for separator in ("\n", "；", ";"):
-    text = text.replace(separator, "、")
-  return [part.strip() for part in text.split("、") if part.strip()]
+    if isinstance(value, list):
+        return [str(item).strip() for item in value if str(item).strip()]
+    if value is None:
+        return []
+    text = str(value).strip()
+    if not text:
+        return []
+    for separator in ("\n", "；", ";"):
+        text = text.replace(separator, "、")
+    return [part.strip() for part in text.split("、") if part.strip()]
 
 
 def render_person_list(people: list[str]) -> str:
-  if not people:
-    return ""
-  return "".join(f'<strong>{esc(person)}</strong>' for person in people)
+    if not people:
+        return ""
+    return "".join(f'<strong>{esc(person)}</strong>' for person in people)
 
 
 def display_western_name(western_name: object, real_name: object) -> str:
-  western = str(western_name or "").strip()
-  real = str(real_name or "").strip()
-  if real:
-    western = western.replace(f"（{real}）", "").strip()
-  return western
+    western = str(western_name or "").strip()
+    real = str(real_name or "").strip()
+    if real:
+        western = western.replace(f"（{real}）", "").strip()
+    return western
 
 
 def render_entries(entries: dict) -> str:
@@ -135,6 +135,7 @@ def render(params: dict, image_rel: str, css_rel: str) -> str:
     trainer = params.get("trainer", {})
     creature = params.get("creature", {})
     seq = params.get("sequence", "000")
+    observed_date = str(params.get("observed_date", "") or "").strip()
     taxonomy = creature.get("taxonomy", {})
     stats = creature.get("stats", {})
     moves = creature.get("moves", {})
@@ -168,9 +169,14 @@ def render(params: dict, image_rel: str, css_rel: str) -> str:
     western_display = display_western_name(western_name, real_name)
     observation_note = str(entries.get("observation_note", "") or "").strip()
     observation_note_html = (
-      f'<p class="observer-comment">{esc(observation_note)}</p>'
-      if observation_note
-      else ""
+        f'<p class="observer-comment">{esc(observation_note)}</p>'
+        if observation_note
+        else ""
+    )
+    observed_date_html = (
+        f'<small class="observed-date">観察日：{esc(observed_date)}</small>'
+        if observed_date
+        else ""
     )
 
     if not caption:
@@ -194,7 +200,7 @@ def render(params: dict, image_rel: str, css_rel: str) -> str:
     <p class="specimen-caption">{esc(caption)}</p>
     <div class="guide-note-grid">
       <div class="guide-note guide-note--trainer"><span>トレーナー</span><strong>{esc(western_display)}</strong><small>本名：{esc(real_name)}{('（' + esc(real_kana) + '）') if real_kana else ''}</small><small>所属：{esc(department)}</small></div>
-      <div class="guide-note guide-note--observers"><span>観察者</span>{recorder_html}{observation_note_html}</div>
+      <div class="guide-note guide-note--observers"><span>観察者</span>{recorder_html}{observed_date_html}{observation_note_html}</div>
     </div>
   </div>
 

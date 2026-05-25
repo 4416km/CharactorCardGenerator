@@ -68,7 +68,7 @@ argument-hint: 'output/ 配下の対象フォルダ名（例: 002_tanaka_taro）
 |----------|-----------|------------|
 | ページ枠 | `.field-guide-page` | — |
 | 画像プレート | `.field-guide-plate` / `.specimen-frame` / `.creature-image` | `./creature.png` |
-| トレーナー/観察者枠 | `.guide-note-grid` / `.guide-note` / `.observer-comment` | `trainer.{western_name,real_name,real_name_kana,department,recorder}` / `entries.observation_note` |
+| トレーナー/観察者枠 | `.guide-note-grid` / `.guide-note` / `.observed-date` / `.observer-comment` | `trainer.{western_name,real_name,real_name_kana,department,recorder}` / `observed_date` / `entries.observation_note` |
 | ヘッダ | `.field-guide-header` / `.specimen-number` / `.field-guide-alias` | `primary_name` / `alias` |
 | タイプ/レアリティ | `.creature-meta-row` / `.type-badge--<class>` / `.rarity-stars` | `types[]` / `rarity` |
 | 分類 | `.taxonomy-strip` | `taxonomy.class` / `taxonomy.{genus,species}` |

@@ -147,6 +147,12 @@ main {
   margin-top: 6px;
 }
 
+.observed-date {
+  color: var(--muted);
+  font-size: 0.78rem;
+  font-weight: 800;
+}
+
 .observer-comment {
   margin: 10px 0 0;
   padding-top: 10px;

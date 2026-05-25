@@ -59,6 +59,7 @@ argument-hint: 'input フォルダ内のインタビューファイル名（例:
 {
   "schema_version": "0.1",
   "source_file": "input/インタビュー_田中太郎.txt",
+  "observed_date": "2026/05/22",
   "sequence": "002",
   "folder_name": "002_tanaka_taro",
   "trainer": {
