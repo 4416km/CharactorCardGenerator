@@ -167,17 +167,18 @@ output/
 以下のテンプレートで構築:
 
 ```
-A field-guide style illustration of an imaginary inner-creature representing a person's
-inner world (not a portrait, not a real animal, not any existing character).
-Style: soft watercolor + line art, naturalist field-guide illustration, isolated subject on
-neutral light background, centered composition, full body view.
+A cute Japanese anime-inspired field-guide illustration of an imaginary inner-creature
+representing a person's inner world (not a portrait, not a real animal, not any existing character).
+Style: adorable original mascot character design, soft watercolor + clean anime line art,
+rounded silhouette, large gentle eyes, small expressive face, charming proportions,
+isolated subject on neutral light background, centered composition, full body view.
 Creature concept: {§1「自分を姿を動物に例えるなら」/「自分の内面を動物に例えるなら」 / §4「この人を動物に例えると？」}
 Primary color palette: {§1「好きな色」 / §4「この人に似あう色は？」}
 Mood: {§1 性格・行動の特徴 / §2 仕事での姿から抽出した形容詞 2〜3 個}
 Distinctive features: {§1「素の性格がわかるエピソード」/「人から言われたことがある意外な一面」から抽出した視覚特徴を箇条書き}
 Vibe / motion: {§1「落ち着く場所・シチュエーション」/ §2「力を発揮しやすい場面」から推測した動きのトーン}
 Avoid: photorealistic real animals, human figures, weapons, blood, text, logos,
-resemblance to Pokémon or any existing IP.
+specific anime franchise styles, resemblance to Pokémon or any existing IP.
 Output: 1024x1024 PNG, transparent or light pastel background.
 ```
 
