@@ -1,12 +1,12 @@
 ---
 name: card-pipeline
-description: 'input/ 配下のインタビュー記録テキスト 1 件を起点に、パラメータ抽出 → 画像生成 → カード HTML 生成までを一気通貫で実行するオーケストレーションスキル。card-params-extract → gpt-image-2 → card-html-generate の 3 スキルを順に呼び、output/<###>_<name>/ に params.json / extraction-log.md / image-prompt.md / creature.png / card.html を揃える。WHEN: インタビューからカードを一気に作る、いきもの図鑑カードをエンドツーエンド生成、抽出から HTML までまとめて実行、いきもの図鑑のフル生成、ワンショットでカード化、人物ごとに一発でカードを作る。'
+description: 'input/ 配下のインタビュー記録テキスト 1 件を起点に、パラメータ抽出 → 画像生成 → カード HTML レンダリングまでを一気通貫で実行する入口スキル。card-params-extract → gpt-image-2 → card-render の 3 ステップで、output/<###>_<name>/ に params.json / extraction-log.md / image-prompt.md / creature.png / card.html を揃える。WHEN: インタビューからカードを一気に作る、いきもの図鑑カードをエンドツーエンド生成、抽出から HTML までまとめて実行、いきもの図鑑のフル生成、ワンショットでカード化、人物ごとに一発でカードを作る。'
 argument-hint: 'input フォルダ内のインタビューファイル名（例: インタビュー_鈴木つばさ.txt）'
 ---
 
 # card-pipeline: インタビュー → カード完成 一気通貫スキル
 
-[card-params-extract](../card-params-extract/SKILL.md) → [gpt-image-2](../gpt-image-2/SKILL.md) → [card-html-generate](../card-html-generate/SKILL.md) の 3 ステップをオーケストレーションし、**インタビュー記録 1 件から完成カードまでを一回の指示で生成する**統合スキル。
+[card-params-extract](../card-params-extract/SKILL.md) → [gpt-image-2](../gpt-image-2/SKILL.md) → [card-render](../card-render/SKILL.md) の 3 ステップをオーケストレーションし、**インタビュー記録 1 件から完成カードまでを一回の指示で生成する**入口スキル。
 
 本スキル自体はロジックを持たず、既存スキルを順番に呼び出すだけ。各ステップの詳細仕様は各スキルの SKILL.md を必ず参照すること。
 
@@ -19,7 +19,7 @@ argument-hint: 'input フォルダ内のインタビューファイル名（例:
 ## 前提
 
 - 入力: `input/インタビュー_*.txt` が存在（テンプレート原本: [reference/interview-template.txt](../../../reference/interview-template.txt) ／ パラメータ生成ルール: [param-generation-rules.md](../card-params-extract/references/param-generation-rules.md) §1）
-- [card-params-extract](../card-params-extract/SKILL.md) / [gpt-image-2](../gpt-image-2/SKILL.md) / [card-html-generate](../card-html-generate/SKILL.md) の前提を満たしている（特に gpt-image-2 の Azure OpenAI 環境変数）
+- [card-params-extract](../card-params-extract/SKILL.md) / [gpt-image-2](../gpt-image-2/SKILL.md) / [card-render](../card-render/SKILL.md) の前提を満たしている（特に gpt-image-2 の Azure OpenAI 環境変数）
 - Python 3.11 系（標準ライブラリのみ）
 
 ## 手順（エージェントの動き）
@@ -49,10 +49,10 @@ argument-hint: 'input フォルダ内のインタビューファイル名（例:
    - 既に `creature.png` がある場合は **スキップ**（ユーザーが明示的に再生成を求めた場合のみ上書き）。
    - API エラー時は stderr の Azure 側メッセージを抜粋提示し、ステップ C は続行（壊れた `<img>` の状態で `card.html` を出す）。プロンプト調整等の対処を促す。
 
-4. **ステップ C: HTML 生成**
-   - [card-html-generate](../card-html-generate/SKILL.md) の `render_card.py` を呼ぶ:
+4. **ステップ C: HTML レンダリング**
+   - [card-render](../card-render/SKILL.md) の `render_card.py` を呼ぶ:
      ```powershell
-     python .github/skills/card-html-generate/scripts/render_card.py `
+     python .github/skills/card-render/scripts/render_card.py `
        --params output/<folder>/params.json `
        --out output/<folder>/card.html
      ```
@@ -100,7 +100,7 @@ python .github/skills/card-pipeline/scripts/build_card.py `
 - [scripts/build_card.py](./scripts/build_card.py) — ステップ B+C を 1 コマンドで実行
 - [card-params-extract](../card-params-extract/SKILL.md) — ステップ A 仕様
 - [gpt-image-2](../gpt-image-2/SKILL.md) — ステップ B 仕様
-- [card-html-generate](../card-html-generate/SKILL.md) — ステップ C 仕様
+- [card-render](../card-render/SKILL.md) — ステップ C 仕様
 - [パラメータ生成ルール](../card-params-extract/references/param-generation-rules.md) — 全体方針
 
 ## 注意

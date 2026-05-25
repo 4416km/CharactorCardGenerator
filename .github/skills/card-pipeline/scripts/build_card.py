@@ -22,7 +22,7 @@ from pathlib import Path
 
 REPO_ROOT = Path(__file__).resolve().parents[4]
 GPT_IMAGE_SCRIPT = REPO_ROOT / ".github" / "skills" / "gpt-image-2" / "scripts" / "generate.py"
-RENDER_SCRIPT = REPO_ROOT / ".github" / "skills" / "card-html-generate" / "scripts" / "render_card.py"
+RENDER_SCRIPT = REPO_ROOT / ".github" / "skills" / "card-render" / "scripts" / "render_card.py"
 
 
 def _load_dotenv(path: Path) -> None:

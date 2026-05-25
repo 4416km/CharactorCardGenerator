@@ -1,6 +1,6 @@
 # いきもの図鑑カード パラメータ生成ルール
 
-card-params-extract / card-html-generate / card-pipeline スキルから参照される、**カードパラメータ生成の単一ルールセット**。本ファイルが正であり、外部資料には依存しない。
+card-params-extract / card-render / card-pipeline スキルから参照される、**カードパラメータ生成の単一ルールセット**。本ファイルが正であり、外部資料には依存しない。
 
 ---
 
@@ -112,7 +112,7 @@ output/
 ### 3.8 タイプ（types・2 属性付与）
 - 各個体に 2 つのタイプを付与。主タイプは「類」と揃え、副タイプは行動傾向から選定
 - 既定の語彙: 思索 / 観測 / 創発 / 行動 / 共鳴 / 調律
-- 上記以外を新設する場合は HTML レンダリング側のタイプ→CSS クラス対応表（[card-html-generate/references/type-class-map.md](../../card-html-generate/references/type-class-map.md)）を併せて更新する必要がある
+- 上記以外を新設する場合は HTML レンダリング側のタイプ→CSS クラス対応表（[card-render/references/type-class-map.md](../../card-render/references/type-class-map.md)）を併せて更新する必要がある
 
 ### 3.9 レアリティ（rarity・★1〜5）
 - 入力「近況・素の姿」「観察者コメント」の豊かさと個体の独自性で評価

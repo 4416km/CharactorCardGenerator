@@ -9,8 +9,8 @@
 - `.github/skills/`: Copilot Agent 用スキル
   - `card-params-extract`: インタビューから `params.json` / `image-prompt.md` / `extraction-log.md` を生成
   - `gpt-image-2`: Azure OpenAI / Foundry の GPT-Image 系モデルで PNG を生成
-  - `card-html-generate`: `params.json` と `creature.png` から `card.html` を生成
-  - `card-pipeline`: 生成済みパラメータから画像生成と HTML 生成をまとめて実行
+  - `card-render`: `params.json` と `creature.png` から `card.html` を生成
+  - `card-pipeline`: インタビューから抽出・画像生成・HTML レンダリングまでまとめて実行
 - `reference/`: 入力テンプレート、Azure サービス別わざ表、カード CSS
 - `.env.example`: Azure OpenAI / Foundry 接続設定のサンプル
 - `requirements.txt`: Python CLI の最小依存関係
@@ -79,7 +79,7 @@ python .github/skills/gpt-image-2/scripts/generate.py `
 HTML 生成のみ:
 
 ```powershell
-python .github/skills/card-html-generate/scripts/render_card.py `
+python .github/skills/card-render/scripts/render_card.py `
   --params output/<folder>/params.json `
   --out output/<folder>/card.html
 ```
