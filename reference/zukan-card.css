@@ -109,7 +109,7 @@ main {
 
 .guide-note-grid {
   display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
+  grid-template-columns: 1fr;
   gap: 12px;
 }
 
@@ -132,6 +132,19 @@ main {
   margin-top: 3px;
   color: var(--ink);
   font-size: 0.95rem;
+}
+
+.guide-note small {
+  display: block;
+  margin-top: 3px;
+  color: #46566b;
+  font-size: 0.82rem;
+  font-weight: 700;
+  line-height: 1.55;
+}
+
+.guide-note--observers strong + strong {
+  margin-top: 6px;
 }
 
 /* 右ペイン: コンテンツ -------------------------------------------------- */
@@ -173,7 +186,7 @@ main {
 
 .taxonomy-strip {
   display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
+  grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 10px;
 }
 

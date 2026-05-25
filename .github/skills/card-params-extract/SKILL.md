@@ -160,6 +160,8 @@ argument-hint: 'input フォルダ内のインタビューファイル名（例:
 
 ルールの詳細は [references/param-generation-rules.md](./references/param-generation-rules.md) を参照。
 
+`trainer.recorder` は単一名なら文字列、複数名なら配列または `、` 区切り文字列で保存してよい。HTML レンダラは複数名を個別行で表示する。
+
 ## 推論ログ（`extraction-log.md`）
 
 各パラメータの「どの入力箇所をどう解釈したか」を 1 セクション 3〜6 行で記録する。
@@ -178,8 +180,8 @@ argument-hint: 'input フォルダ内のインタビューファイル名（例:
   - 「太郎」→ Theo（Theodore = 神の贈り物 / 一郎=英雄系の音）
   - 「田中」→ Fieldheart（田=field、中=heart のメタファー）
   - 採用: **テオ・フィールドハート（田中 太郎）**
-- 所属「クラウド技術本部」はそのまま表示
-- 記録係「山田 静香」は params.trainer.recorder へ格納のみ（カード非表示）
+- 所属「クラウド技術本部」はトレーナー欄の所属として表示
+- 記録係「山田 静香」は params.trainer.recorder へ格納し、観察者欄へ表示。複数名の場合は配列または `、` 区切りで保持
 
 ## 2. 生物名・別名・分類
 - §1「最近ハマっている＝トレイルランニング」「§5 動物例＝ハヤブサ」「§5 すがた＝足元に炎」

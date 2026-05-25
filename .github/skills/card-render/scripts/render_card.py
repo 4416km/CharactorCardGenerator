@@ -89,6 +89,33 @@ def render_tags(tags: list[str]) -> str:
     return "".join(f'<span class="affinity-tag">{esc(tg)}</span>' for tg in (tags or []))
 
 
+def normalize_people(value: object) -> list[str]:
+  if isinstance(value, list):
+    return [str(item).strip() for item in value if str(item).strip()]
+  if value is None:
+    return []
+  text = str(value).strip()
+  if not text:
+    return []
+  for separator in ("\n", "；", ";"):
+    text = text.replace(separator, "、")
+  return [part.strip() for part in text.split("、") if part.strip()]
+
+
+def render_person_list(people: list[str]) -> str:
+  if not people:
+    return ""
+  return "".join(f'<strong>{esc(person)}</strong>' for person in people)
+
+
+def display_western_name(western_name: object, real_name: object) -> str:
+  western = str(western_name or "").strip()
+  real = str(real_name or "").strip()
+  if real:
+    western = western.replace(f"（{real}）", "").strip()
+  return western
+
+
 def render_entries(entries: dict) -> str:
     parts = []
     for key, label, wide in ENTRY_ORDER:
@@ -128,8 +155,9 @@ def render(params: dict, image_rel: str, css_rel: str) -> str:
 
     real_name = trainer.get("real_name", "")
     real_kana = trainer.get("real_name_kana", "")
+    western_name = trainer.get("western_name", "")
     department = trainer.get("department", "")
-    recorder = trainer.get("recorder", "")
+    recorders = normalize_people(trainer.get("recorder", ""))
 
     type_badges = render_type_badges(types)
     rarity_stars = render_rarity(rarity)
@@ -137,8 +165,9 @@ def render(params: dict, image_rel: str, css_rel: str) -> str:
     weak_tags = render_tags(weak.get("tags", []))
     resist_tags = render_tags(resist.get("tags", []))
     entries_html = render_entries(entries)
+    recorder_html = render_person_list(recorders)
+    western_display = display_western_name(western_name, real_name)
 
-    caption_kana = f"（{esc(real_kana)}）" if real_kana else ""
     if not caption:
         caption = f"{real_name}{('（' + real_kana + '）') if real_kana else ''} の内面を架空のいきものとして描写。価値観・思考癖・仕事の進め方やこだわりを反映した内面生物。"
 
@@ -159,7 +188,8 @@ def render(params: dict, image_rel: str, css_rel: str) -> str:
     </div>
     <p class="specimen-caption">{esc(caption)}</p>
     <div class="guide-note-grid">
-      <div class="guide-note"><span>観察者</span><strong>{esc(recorder)}</strong></div>
+      <div class="guide-note guide-note--trainer"><span>トレーナー</span><strong>{esc(western_display)}</strong><small>本名：{esc(real_name)}{('（' + esc(real_kana) + '）') if real_kana else ''}</small><small>所属：{esc(department)}</small></div>
+      <div class="guide-note guide-note--observers"><span>観察者</span>{recorder_html}</div>
     </div>
   </div>
 
@@ -175,7 +205,6 @@ def render(params: dict, image_rel: str, css_rel: str) -> str:
     </header>
 
     <div class="taxonomy-strip" aria-label="分類情報">
-      <div><span>所属</span><strong>{esc(department)}</strong></div>
       <div><span>類</span><strong>{esc(taxonomy.get('class',''))}</strong></div>
       <div><span>属・種</span><strong>{esc(taxonomy.get('genus',''))} {esc(taxonomy.get('species',''))}</strong></div>
     </div>

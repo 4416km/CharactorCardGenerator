@@ -62,14 +62,16 @@ argument-hint: 'output/ 配下の対象フォルダ名（例: 002_tanaka_taro）
 
 [scripts/render_card.py](./scripts/render_card.py) は `params.json` から以下のブロックを構築する（CSS クラスは [`reference/zukan-card.css`](../../../reference/zukan-card.css) 準拠）。
 
+`trainer.recorder` は単一文字列、複数名の配列、または `、` / 改行 / `;` 区切り文字列を受け付け、観察者欄へ複数行で表示する。
+
 | ブロック | 主要クラス | 差し込み元 |
 |----------|-----------|------------|
 | ページ枠 | `.field-guide-page` | — |
 | 画像プレート | `.field-guide-plate` / `.specimen-frame` / `.creature-image` | `./creature.png` |
-| 観察メモ枠 | `.guide-note-grid` / `.guide-note` | `trainer.recorder` |
+| トレーナー/観察者枠 | `.guide-note-grid` / `.guide-note` | `trainer.{western_name,real_name,real_name_kana,department,recorder}` |
 | ヘッダ | `.field-guide-header` / `.specimen-number` / `.field-guide-alias` | `primary_name` / `alias` |
 | タイプ/レアリティ | `.creature-meta-row` / `.type-badge--<class>` / `.rarity-stars` | `types[]` / `rarity` |
-| 分類 | `.taxonomy-strip` | `trainer.department` / `taxonomy.class` / `taxonomy.{genus,species}` |
+| 分類 | `.taxonomy-strip` | `taxonomy.class` / `taxonomy.{genus,species}` |
 | ステータス | `.stat-panel` / `.stat-row` / `.stat-row--peak` | `stats.{endurance,...}` / `stats.peaks` |
 | わざ | `.move-cards` / `.move-card--signature` / `.move-card--hidden` | `moves.signature` / `moves.hidden` |
 | 弱点・耐性 | `.affinity-box` / `.affinity-cell--weak` / `.affinity-cell--resist` | `affinity.{weak,resist}` |
