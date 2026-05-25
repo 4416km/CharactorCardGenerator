@@ -38,6 +38,43 @@ STAT_LABELS = {
     "thinking": "思考力",
 }
 
+TAXONOMY_CLASS_DESC = {
+    "突破類": "とにかく前に出る",
+    "探索類": "新しいものを探す",
+    "支援類": "周囲を助ける",
+    "防衛類": "安定化させる",
+    "調律類": "人間関係を整える",
+    "構築類": "仕組み化する",
+    "収束類": "混乱をまとめる",
+    "触発類": "人を動機づける",
+}
+
+TAXONOMY_GENUS_DESC = {
+    "戦略属": "全体最適を見る",
+    "直感属": "感覚で飛ぶ",
+    "分析属": "データ重視",
+    "共感属": "感情を読む",
+    "理想属": "ビジョン重視",
+    "現実属": "実利重視",
+    "改善属": "最適化を続ける",
+    "創造属": "新概念を生む",
+    "観測属": "状況理解に長ける",
+    "挑発属": "あえて揺さぶる",
+}
+
+TAXONOMY_SPECIES_DESC = {
+    "指揮種": "リーダー",
+    "参謀種": "裏方戦術家",
+    "開拓種": "新規領域",
+    "守護種": "安定運用",
+    "錬成種": "改善職人",
+    "共鳴種": "感情同期",
+    "観測種": "状況把握",
+    "起爆種": "空気を変える",
+    "触媒種": "人同士を繋ぐ",
+    "継承種": "ナレッジ伝承",
+}
+
 ENTRY_ORDER = [
     ("classification", "分類", True),
     ("appearance", "すがた・体色", True),
@@ -208,7 +245,6 @@ def render(params: dict, image_rel: str, css_rel: str) -> str:
     <header class="field-guide-header">
       <span class="specimen-number">いきものファイル</span>
       <h3>{esc(primary_name)}</h3>
-      <p class="field-guide-alias">別名：{esc(alias)}</p>
       <div class="creature-meta-row">
         {type_badges}
         <span class="rarity-stars">{rarity_stars}</span>
@@ -216,9 +252,9 @@ def render(params: dict, image_rel: str, css_rel: str) -> str:
     </header>
 
     <div class="taxonomy-strip" aria-label="分類情報">
-      <div><span>類</span><strong>{esc(taxonomy.get('class',''))}</strong></div>
-            <div><span>属</span><strong>{esc(taxonomy.get('genus',''))}</strong></div>
-            <div><span>種</span><strong>{esc(taxonomy.get('species',''))}</strong></div>
+      <div><span>類</span><strong>{esc(taxonomy.get('class',''))}</strong><small>{esc(TAXONOMY_CLASS_DESC.get(taxonomy.get('class',''), ''))}</small></div>
+            <div><span>属</span><strong>{esc(taxonomy.get('genus',''))}</strong><small>{esc(TAXONOMY_GENUS_DESC.get(taxonomy.get('genus',''), ''))}</small></div>
+            <div><span>種</span><strong>{esc(taxonomy.get('species',''))}</strong><small>{esc(TAXONOMY_SPECIES_DESC.get(taxonomy.get('species',''), ''))}</small></div>
     </div>
 
     <section class="stat-panel" aria-label="ステータス">
