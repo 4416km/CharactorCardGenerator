@@ -28,7 +28,7 @@ RENDER_SCRIPT = REPO_ROOT / ".github" / "skills" / "card-render" / "scripts" / "
 def _load_dotenv(path: Path) -> None:
     """標準ライブラリのみで .env を読み込み os.environ に注入する軽量ローダー.
 
-    - 既存の環境変数は上書きしない（CLI/シェルで設定済みの値を優先）
+    - ルートディレクトリの .env を既存の環境変数より優先する
     - 形式: ``KEY=VALUE`` / ``export KEY=VALUE``
     - 値は前後の `"`/`'` 引用を1組のみ除去
     - `#` で始まる行と空行はスキップ
@@ -48,7 +48,7 @@ def _load_dotenv(path: Path) -> None:
         value = value.strip()
         if len(value) >= 2 and value[0] == value[-1] and value[0] in ("\"", "'"):
             value = value[1:-1]
-        os.environ.setdefault(key, value)
+        os.environ[key] = value
 
 
 _load_dotenv(REPO_ROOT / ".env")

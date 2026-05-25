@@ -217,7 +217,8 @@ def render(params: dict, image_rel: str, css_rel: str) -> str:
 
     <div class="taxonomy-strip" aria-label="分類情報">
       <div><span>類</span><strong>{esc(taxonomy.get('class',''))}</strong></div>
-      <div><span>属・種</span><strong>{esc(taxonomy.get('genus',''))} {esc(taxonomy.get('species',''))}</strong></div>
+            <div><span>属</span><strong>{esc(taxonomy.get('genus',''))}</strong></div>
+            <div><span>種</span><strong>{esc(taxonomy.get('species',''))}</strong></div>
     </div>
 
     <section class="stat-panel" aria-label="ステータス">

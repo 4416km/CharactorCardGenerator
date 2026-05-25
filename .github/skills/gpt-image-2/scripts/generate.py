@@ -21,6 +21,8 @@
     AZURE_OPENAI_IMAGE_DEPLOYMENT  （下位互換）deployment mode 用デプロイ名
     AZURE_OPENAI_API_VERSION       v1: 既定 preview / deployment: 既定 2025-04-01-preview
     AZURE_OPENAI_API_MODE          v1 | deployment (既定: v1)
+
+ルートディレクトリの .env は既存のシェル環境変数より優先される。
 """
 
 from __future__ import annotations
@@ -34,11 +36,11 @@ from pathlib import Path
 import requests
 from dotenv import load_dotenv
 
-# .github/skills/gpt-image-2/scripts/generate.py → parents[4] = リポジトリルート
+# .github/skills/gpt-image-2/scripts/generate.py -> parents[4] = repository root
 REPO_ROOT = Path(__file__).resolve().parents[4]
 
 
-load_dotenv(REPO_ROOT / ".env", override=False, encoding="utf-8")
+load_dotenv(REPO_ROOT / ".env", override=True, encoding="utf-8")
 
 
 def build_url(endpoint: str, deployment: str, api_version: str, api_mode: str) -> str:

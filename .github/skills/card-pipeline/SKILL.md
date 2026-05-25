@@ -42,10 +42,10 @@ argument-hint: 'input フォルダ内のインタビューファイル名（例:
      python .github/skills/gpt-image-2/scripts/generate.py `
        --prompt-file output/<folder>/image-prompt.md `
        --out output/<folder>/creature.png `
-       --model $env:AZURE_OPENAI_IMAGE_MODEL `
        --size 1024x1024 `
        --quality medium
      ```
+   - `generate.py` はルート `.env` を最優先で読み込むため、モデル名・APIモード・エンドポイント等は原則 `.env` に置く。
    - 既に `creature.png` がある場合は **スキップ**（ユーザーが明示的に再生成を求めた場合のみ上書き）。
    - API エラー時は stderr の Azure 側メッセージを抜粋提示し、ステップ C は続行（壊れた `<img>` の状態で `card.html` を出す）。プロンプト調整等の対処を促す。
 
@@ -69,8 +69,7 @@ argument-hint: 'input フォルダ内のインタビューファイル名（例:
 ```powershell
 # params.json 抽出後（=card-params-extract 実行後）に:
 python .github/skills/card-pipeline/scripts/build_card.py `
-  --folder output/003_suzuki_tsubasa `
-  --model $env:AZURE_OPENAI_IMAGE_MODEL
+  --folder output/003_suzuki_tsubasa
 ```
 
 主要オプション:

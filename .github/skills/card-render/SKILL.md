@@ -71,7 +71,7 @@ argument-hint: 'output/ 配下の対象フォルダ名（例: 002_tanaka_taro）
 | トレーナー/観察者枠 | `.guide-note-grid` / `.guide-note` / `.observed-date` / `.observer-comment` | `trainer.{western_name,real_name,real_name_kana,department,recorder}` / `observed_date` / `entries.observation_note` |
 | ヘッダ | `.field-guide-header` / `.specimen-number` / `.field-guide-alias` | `primary_name` / `alias` |
 | タイプ/レアリティ | `.creature-meta-row` / `.type-badge--<class>` / `.rarity-stars` | `types[]` / `rarity` |
-| 分類 | `.taxonomy-strip` | `taxonomy.class` / `taxonomy.{genus,species}` |
+| 分類 | `.taxonomy-strip` | `taxonomy.class` / `taxonomy.genus` / `taxonomy.species` |
 | ステータス | `.stat-panel` / `.stat-row` / `.stat-row--peak` | `stats.{endurance,...}` / `stats.peaks` |
 | わざ | `.move-cards` / `.move-card--signature` / `.move-card--hidden` | `moves.signature` / `moves.hidden` |
 | 弱点・耐性 | `.affinity-box` / `.affinity-cell--weak` / `.affinity-cell--resist` | `affinity.{weak,resist}` |
