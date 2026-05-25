@@ -32,38 +32,13 @@ import sys
 from pathlib import Path
 
 import requests
+from dotenv import load_dotenv
 
 # .github/skills/gpt-image-2/scripts/generate.py → parents[4] = リポジトリルート
 REPO_ROOT = Path(__file__).resolve().parents[4]
 
 
-def _load_dotenv(path: Path) -> None:
-    """標準ライブラリのみで .env を読み込み os.environ に注入する軽量ローダー.
-
-    - 既存の環境変数は **上書きしない**（CLI/シェルで設定済みの値を優先）
-    - 形式: ``KEY=VALUE`` / ``export KEY=VALUE``
-    - 値は前後の `"`/`'` 引用を1組のみ除去
-    - `#` で始まる行と空行はスキップ
-    """
-    if not path.is_file():
-        return
-    for raw in path.read_text(encoding="utf-8").splitlines():
-        line = raw.strip()
-        if not line or line.startswith("#"):
-            continue
-        if line.startswith("export "):
-            line = line[len("export "):].lstrip()
-        if "=" not in line:
-            continue
-        key, _, value = line.partition("=")
-        key = key.strip()
-        value = value.strip()
-        if len(value) >= 2 and value[0] == value[-1] and value[0] in ("\"", "'"):
-            value = value[1:-1]
-        os.environ.setdefault(key, value)
-
-
-_load_dotenv(REPO_ROOT / ".env")
+load_dotenv(REPO_ROOT / ".env", override=False, encoding="utf-8")
 
 
 def build_url(endpoint: str, deployment: str, api_version: str, api_mode: str) -> str:
