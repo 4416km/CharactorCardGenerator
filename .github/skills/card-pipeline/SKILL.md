@@ -46,7 +46,7 @@ argument-hint: 'input フォルダ内のインタビューファイル名（例:
        --size 1024x1024 `
        --quality medium
      ```
-   - `generate.py` はルート `.env` を最優先で読み込むため、APIモード・エンドポイント等は原則 `.env` に置く。
+   - `generate.py` はルート `.env` を**スクリプト内部で自動的に読み込む**ため、エージェントが事前に `.env` の存在確認やシェル環境変数の検証を行う必要はない。`.env` は `.gitignore` 対象のため `file_search` では見つからないことがある。**そのまま実行し、エラーが出た場合のみユーザーへ確認する**こと。
    - モデル名はユーザーが `--model` で指定した名前、または `.env` / 環境変数の `AZURE_OPENAI_IMAGE_MODEL` / `AZURE_OPENAI_IMAGE_DEPLOYMENT` の値だけを使う。未指定時はエラー停止し、エージェント判断で補完しない。
    - 既に `creature.png` がある場合は **スキップ**（ユーザーが明示的に再生成を求めた場合のみ上書き）。
    - API エラー時は stderr の Azure 側メッセージを抜粋提示し、ステップ C は続行（壊れた `<img>` の状態で `card.html` を出す）。`unknown_model` の場合も別モデルへ自動リトライせず、ユーザーにモデル名の修正を依頼する。
