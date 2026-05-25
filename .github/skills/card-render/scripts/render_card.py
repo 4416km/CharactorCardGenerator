@@ -46,7 +46,6 @@ ENTRY_ORDER = [
     ("personality", "性格", False),
     ("behavior", "行動", True),
     ("growth", "成長条件", False),
-    ("observation_note", "観察メモ", True),
 ]
 
 
@@ -167,6 +166,12 @@ def render(params: dict, image_rel: str, css_rel: str) -> str:
     entries_html = render_entries(entries)
     recorder_html = render_person_list(recorders)
     western_display = display_western_name(western_name, real_name)
+    observation_note = str(entries.get("observation_note", "") or "").strip()
+    observation_note_html = (
+      f'<p class="observer-comment">{esc(observation_note)}</p>'
+      if observation_note
+      else ""
+    )
 
     if not caption:
         caption = f"{real_name}{('（' + real_kana + '）') if real_kana else ''} の内面を架空のいきものとして描写。価値観・思考癖・仕事の進め方やこだわりを反映した内面生物。"
@@ -189,7 +194,7 @@ def render(params: dict, image_rel: str, css_rel: str) -> str:
     <p class="specimen-caption">{esc(caption)}</p>
     <div class="guide-note-grid">
       <div class="guide-note guide-note--trainer"><span>トレーナー</span><strong>{esc(western_display)}</strong><small>本名：{esc(real_name)}{('（' + esc(real_kana) + '）') if real_kana else ''}</small><small>所属：{esc(department)}</small></div>
-      <div class="guide-note guide-note--observers"><span>観察者</span>{recorder_html}</div>
+      <div class="guide-note guide-note--observers"><span>観察者</span>{recorder_html}{observation_note_html}</div>
     </div>
   </div>
 

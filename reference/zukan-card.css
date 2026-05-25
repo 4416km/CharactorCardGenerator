@@ -147,6 +147,16 @@ main {
   margin-top: 6px;
 }
 
+.observer-comment {
+  margin: 10px 0 0;
+  padding-top: 10px;
+  border-top: 1px dashed var(--line);
+  color: #536276;
+  font-size: 0.82rem;
+  font-weight: 650;
+  line-height: 1.62;
+}
+
 /* 右ペイン: コンテンツ -------------------------------------------------- */
 .field-guide-content {
   display: grid;
