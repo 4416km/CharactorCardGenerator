@@ -6,9 +6,10 @@
     - gpt-image-2 の環境変数が設定済み
 
 使用例:
-    python build_card.py --folder output/003_suzuki_tsubasa
-    python build_card.py --folder output/003_suzuki_tsubasa --force-image
-    python build_card.py --folder output/003_suzuki_tsubasa --skip-image --model gpt-image-2
+    python build_card.py --folder output/003_suzuki_tsubasa --model gpt-image-1.5
+    python build_card.py --folder output/003_suzuki_tsubasa --force-image --model gpt-image-1.5
+    python build_card.py --folder output/003_suzuki_tsubasa --model gpt-image-1.5
+    python build_card.py --folder output/003_suzuki_tsubasa --skip-image
 """
 
 from __future__ import annotations
@@ -60,14 +61,30 @@ def run(cmd: list[str]) -> int:
     return proc.returncode
 
 
+def resolve_model(value: str | None) -> str:
+    model = (value or "").strip()
+    if model:
+        return model
+    env_model = (
+        os.environ.get("AZURE_OPENAI_IMAGE_MODEL")
+        or os.environ.get("AZURE_OPENAI_IMAGE_DEPLOYMENT")
+        or ""
+    ).strip()
+    if env_model:
+        return env_model
+    sys.exit(
+        "ERROR: 画像モデル名が指定されていません。"
+        "--model または AZURE_OPENAI_IMAGE_MODEL を明示してください。"
+    )
+
+
 def main() -> int:
     ap = argparse.ArgumentParser(description="card-pipeline: 画像 + HTML まとめ実行")
     ap.add_argument("--folder", required=True, help="対象フォルダ（output/<###>_<name>/）")
     ap.add_argument(
         "--model",
-        default=os.environ.get("AZURE_OPENAI_IMAGE_MODEL")
-        or os.environ.get("AZURE_OPENAI_IMAGE_DEPLOYMENT", "gpt-image-2"),
-        help="画像モデル名（既定: 環境変数 AZURE_OPENAI_IMAGE_MODEL）",
+        default=None,
+        help="画像モデル名（--model または環境変数 AZURE_OPENAI_IMAGE_MODEL で明示。既定モデルなし）",
     )
     ap.add_argument("--size", default="1024x1024")
     ap.add_argument("--quality", default="medium",
@@ -104,12 +121,13 @@ def main() -> int:
             sys.exit(f"ERROR: {prompt_path} が見つかりません。先に card-params-extract を実行してください。")
         if not GPT_IMAGE_SCRIPT.is_file():
             sys.exit(f"ERROR: gpt-image-2 スクリプトが見つかりません: {GPT_IMAGE_SCRIPT}")
+        model = resolve_model(args.model)
 
         cmd = [
             python_exe, str(GPT_IMAGE_SCRIPT),
             "--prompt-file", str(prompt_path),
             "--out", str(image_path),
-            "--model", args.model,
+            "--model", model,
             "--size", args.size,
             "--quality", args.quality,
             "--api-mode", args.api_mode,

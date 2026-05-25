@@ -7,17 +7,17 @@
                POST {endpoint}/openai/deployments/{deployment}/images/generations?api-version=...
 
 使用例:
-    python generate.py --prompt "a forest fox spirit" --out out.png
-    python generate.py --prompt-file prompt.txt --out card.png --size 1024x1536 --quality high
+    python generate.py --prompt "a forest fox spirit" --out out.png --model gpt-image-1.5
+    python generate.py --prompt-file prompt.txt --out card.png --model gpt-image-1.5 --size 1024x1536 --quality high
     python generate.py --prompt "..." --out o.png --model gpt-image-1.5
     python generate.py --prompt "..." --out o.png --model MAI-Image-2
-    python generate.py --prompt "..." --out sample.png --n 3
-    python generate.py --prompt "..." --out o.png --api-mode deployment
+    python generate.py --prompt "..." --out sample.png --model gpt-image-1.5 --n 3
+    python generate.py --prompt "..." --out o.png --model my-image-deployment --api-mode deployment
 
 環境変数:
     AZURE_OPENAI_ENDPOINT          例: https://<resource>.openai.azure.com/
     AZURE_OPENAI_API_KEY           リソースAPIキー
-    AZURE_OPENAI_IMAGE_MODEL       使用モデル名 (例: gpt-image-2 / gpt-image-1.5 / MAI-Image-2)
+    AZURE_OPENAI_IMAGE_MODEL       使用モデル名 (例: gpt-image-2 / gpt-image-1.5 / MAI-Image-2)。DEPLOYMENT も未指定ならエラー
     AZURE_OPENAI_IMAGE_DEPLOYMENT  （下位互換）deployment mode 用デプロイ名
     AZURE_OPENAI_API_VERSION       v1: 既定 preview / deployment: 既定 2025-04-01-preview
     AZURE_OPENAI_API_MODE          v1 | deployment (既定: v1)
@@ -61,6 +61,23 @@ def load_prompt(args: argparse.Namespace) -> str:
     sys.exit("ERROR: --prompt または --prompt-file を指定してください")
 
 
+def resolve_model(args: argparse.Namespace) -> str:
+    model = (args.model or "").strip()
+    if model:
+        return model
+    env_model = (
+        os.environ.get("AZURE_OPENAI_IMAGE_MODEL")
+        or os.environ.get("AZURE_OPENAI_IMAGE_DEPLOYMENT")
+        or ""
+    ).strip()
+    if env_model:
+        return env_model
+    sys.exit(
+        "ERROR: 画像モデル名が指定されていません。"
+        "--model または AZURE_OPENAI_IMAGE_MODEL を明示してください。"
+    )
+
+
 def save_images(payload: dict, out_path: Path, n: int) -> list[Path]:
     data = payload.get("data")
     if not data:
@@ -96,11 +113,11 @@ def main() -> int:
                         help="透過PNGにするなら transparent（gpt-image-1系のみ）")
     parser.add_argument(
         "--model",
-        default=os.environ.get("AZURE_OPENAI_IMAGE_MODEL")
-                or os.environ.get("AZURE_OPENAI_IMAGE_DEPLOYMENT", "gpt-image-2"),
+        default=None,
         help="使用する画像モデル名。例: gpt-image-2 / gpt-image-1.5 / gpt-image-1 / MAI-Image-2。"
              "v1 mode では body.model、deployment mode では URL 上のデプロイ名として使用されます。"
-             "環境変数 AZURE_OPENAI_IMAGE_MODEL または AZURE_OPENAI_IMAGE_DEPLOYMENT でも指定可。",
+             "環境変数 AZURE_OPENAI_IMAGE_MODEL または AZURE_OPENAI_IMAGE_DEPLOYMENT でも指定可。"
+             "未指定時の既定モデルはありません。",
     )
     parser.add_argument(
         "--api-mode",
@@ -120,7 +137,7 @@ def main() -> int:
     api_key = os.environ.get("AZURE_OPENAI_API_KEY")
     if not endpoint or not api_key:
         sys.exit("ERROR: AZURE_OPENAI_ENDPOINT と AZURE_OPENAI_API_KEY を設定してください")
-    deployment = args.model
+    deployment = resolve_model(args)
     default_api_version = "preview" if args.api_mode == "v1" else "2025-04-01-preview"
     api_version = os.environ.get("AZURE_OPENAI_API_VERSION", default_api_version)
 

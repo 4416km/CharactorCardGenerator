@@ -42,12 +42,14 @@ argument-hint: 'input フォルダ内のインタビューファイル名（例:
      python .github/skills/gpt-image-2/scripts/generate.py `
        --prompt-file output/<folder>/image-prompt.md `
        --out output/<folder>/creature.png `
+       --model <ユーザー指定モデル名> `
        --size 1024x1024 `
        --quality medium
      ```
-   - `generate.py` はルート `.env` を最優先で読み込むため、モデル名・APIモード・エンドポイント等は原則 `.env` に置く。
+   - `generate.py` はルート `.env` を最優先で読み込むため、APIモード・エンドポイント等は原則 `.env` に置く。
+   - モデル名はユーザーが `--model` で指定した名前、または `.env` / 環境変数の `AZURE_OPENAI_IMAGE_MODEL` / `AZURE_OPENAI_IMAGE_DEPLOYMENT` の値だけを使う。未指定時はエラー停止し、エージェント判断で補完しない。
    - 既に `creature.png` がある場合は **スキップ**（ユーザーが明示的に再生成を求めた場合のみ上書き）。
-   - API エラー時は stderr の Azure 側メッセージを抜粋提示し、ステップ C は続行（壊れた `<img>` の状態で `card.html` を出す）。プロンプト調整等の対処を促す。
+   - API エラー時は stderr の Azure 側メッセージを抜粋提示し、ステップ C は続行（壊れた `<img>` の状態で `card.html` を出す）。`unknown_model` の場合も別モデルへ自動リトライせず、ユーザーにモデル名の修正を依頼する。
 
 4. **ステップ C: HTML レンダリング**
    - [card-render](../card-render/SKILL.md) の `render_card.py` を呼ぶ:
@@ -77,7 +79,7 @@ python .github/skills/card-pipeline/scripts/build_card.py `
 | 引数 | 既定値 | 説明 |
 |------|--------|------|
 | `--folder` | 必須 | 対象フォルダ（`output/<###>_<name>/`） |
-| `--model` | `gpt-image-2` | 画像モデル |
+| `--model` | なし | 画像モデル。未指定時は `AZURE_OPENAI_IMAGE_MODEL` / `AZURE_OPENAI_IMAGE_DEPLOYMENT` を使い、それも無ければエラー |
 | `--size` | `1024x1024` | 画像サイズ |
 | `--quality` | `medium` | 画像品質 |
 | `--force-image` | off | 既存 `creature.png` を上書き再生成 |

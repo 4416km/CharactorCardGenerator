@@ -32,6 +32,8 @@ AZURE_OPENAI_API_KEY=<your-api-key>
 AZURE_OPENAI_IMAGE_MODEL=gpt-image-2
 ```
 
+画像モデル名は `AZURE_OPENAI_IMAGE_MODEL` または実行時の `--model` で必ず指定します。未指定時の既定モデルはありません。
+
 `.env`、`input/` の実インタビュー、`output/` の生成物は `.gitignore` で除外しています。
 
 ## 使い方
@@ -41,13 +43,13 @@ AZURE_OPENAI_IMAGE_MODEL=gpt-image-2
 3. `output/<folder>/params.json` と `output/<folder>/image-prompt.md` ができたら、画像と HTML を生成します。
 
 ```powershell
-python .github/skills/card-pipeline/scripts/build_card.py --folder output/<folder>
+python .github/skills/card-pipeline/scripts/build_card.py --folder output/<folder> --model <your-image-model>
 ```
 
 画像を作り直したい場合:
 
 ```powershell
-python .github/skills/card-pipeline/scripts/build_card.py --folder output/<folder> --force-image
+python .github/skills/card-pipeline/scripts/build_card.py --folder output/<folder> --force-image --model <your-image-model>
 ```
 
 HTML だけ作り直したい場合:
@@ -72,6 +74,7 @@ python .github/skills/card-pipeline/scripts/build_card.py --folder output/<folde
 python .github/skills/gpt-image-2/scripts/generate.py `
   --prompt-file output/<folder>/image-prompt.md `
   --out output/<folder>/creature.png `
+  --model <your-image-model> `
   --size 1024x1024 `
   --quality medium
 ```
