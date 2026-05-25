@@ -1,0 +1,79 @@
+{
+  "$schema": "./azure-move-map.schema.json",
+  "version": "1.0.0",
+  "source": "公開リファレンス / Azureサービス別 固定わざ表",
+  "description": "Azureサービスを内面生物カードの『とくいわざ』『弱点』に変換するためのマッピング表。1サービスにつき固定わざ名と短い特徴文を紐づける。",
+  "moves": [
+    { "service": "App Service", "moveName": "アオゾラホスト", "feature": "Webアプリをすばやく公開する軽やかな展開力。", "category": "compute" },
+    { "service": "Azure Functions", "moveName": "トリガーフラッシュ", "feature": "イベントを合図に一瞬で処理を走らせる瞬発力。", "category": "compute" },
+    { "service": "Azure Container Apps", "moveName": "コンテナライド", "feature": "小さなサービスを柔軟に運び、必要な時だけ広げる。", "category": "compute" },
+    { "service": "Azure Kubernetes Service", "moveName": "クラスターコール", "feature": "多数のコンテナを編成し、大きな群れとして動かす。", "category": "compute", "aliases": ["AKS"] },
+    { "service": "Virtual Machines", "moveName": "ノードガード", "feature": "必要な計算力を確実に呼び出す基礎体力。", "category": "compute", "aliases": ["VM"] },
+    { "service": "Virtual Machine Scale Sets", "moveName": "スケールラッシュ", "feature": "負荷に合わせて同型の力を整列させる。", "category": "compute", "aliases": ["VMSS"] },
+    { "service": "Azure Batch", "moveName": "ジョブバースト", "feature": "大量処理を一斉に走らせる集中突破。", "category": "compute" },
+    { "service": "Azure Spring Apps", "moveName": "スプリングブリーズ", "feature": "分散したアプリを春風のように整える。", "category": "compute" },
+
+    { "service": "Blob Storage", "moveName": "データオーシャン", "feature": "大きなデータを広い海のように受け止める。", "category": "storage" },
+    { "service": "Azure Files", "moveName": "シェアシールド", "feature": "みんなで使うファイル置き場を安定して守る。", "category": "storage" },
+    { "service": "Queue Storage", "moveName": "キューリレー", "feature": "処理を並べ、焦らず確実に次へ渡す。", "category": "storage" },
+    { "service": "Table Storage", "moveName": "テーブルステップ", "feature": "シンプルな情報を素早く記録する。", "category": "storage" },
+    { "service": "Data Lake Storage", "moveName": "レイクダイブ", "feature": "大量データを深い湖に集め、分析の源にする。", "category": "storage" },
+
+    { "service": "Azure SQL Database", "moveName": "リレーションビーム", "feature": "整った関係性で大切な情報を正確に扱う。", "category": "database" },
+    { "service": "Azure Cosmos DB", "moveName": "コスモサーチ", "feature": "世界中に広がるデータを素早く見つける。", "category": "database" },
+    { "service": "Azure Database for PostgreSQL", "moveName": "ワイズクエリ", "feature": "堅実なデータ管理に柔軟な拡張力を加える。", "category": "database" },
+    { "service": "Azure Database for MySQL", "moveName": "ライトクエリ", "feature": "使いやすいデータ基盤を素直に育てる。", "category": "database" },
+    { "service": "Azure Cache for Redis", "moveName": "レッドアクセル", "feature": "よく使う情報を近くに置き、反応速度を上げる。", "category": "database" },
+
+    { "service": "Service Bus", "moveName": "バスリレー", "feature": "大事なメッセージを落ち着いて確実に届ける。", "category": "integration" },
+    { "service": "Event Hubs", "moveName": "イベントストーム", "feature": "大量イベントを流星群のように受け止める。", "category": "integration" },
+    { "service": "Event Grid", "moveName": "シグナルネット", "feature": "変化の知らせを必要な相手へ素早く伝える。", "category": "integration" },
+    { "service": "Logic Apps", "moveName": "ロジックチェイン", "feature": "処理とサービスをつないで自動化の連鎖を作る。", "category": "integration" },
+    { "service": "API Management", "moveName": "ゲートシールド", "feature": "APIの入口を整え、守りながら使いやすくする。", "category": "integration", "aliases": ["APIM"] },
+
+    { "service": "Key Vault", "moveName": "キーガード", "feature": "秘密や証明書を守り、安全な挑戦を支える。", "category": "security" },
+    { "service": "Entra ID", "moveName": "アイデンティシール", "feature": "誰が誰かを見極め、正しい扉を開く。", "category": "security", "aliases": ["Azure AD", "AAD"] },
+    { "service": "Managed Identities", "moveName": "トラストリンク", "feature": "秘密を持ち歩かず、信頼で接続する。", "category": "security" },
+    { "service": "Azure RBAC", "moveName": "ロールバッジ", "feature": "必要な力だけを渡し、役割を明確にする。", "category": "security", "aliases": ["RBAC"] },
+
+    { "service": "Virtual Network", "moveName": "クラウドネット", "feature": "安全な通り道を作り、クラウド内をつなぐ。", "category": "network", "aliases": ["VNet"] },
+    { "service": "Private Link", "moveName": "プライベートパス", "feature": "外に出ず、内側から安全にたどり着く。", "category": "network" },
+    { "service": "Load Balancer", "moveName": "ロードシェア", "feature": "負荷を分けて、全体の安定感を保つ。", "category": "network" },
+    { "service": "Application Gateway", "moveName": "レイヤーゲート", "feature": "アプリへの入口を読み解き、賢く守る。", "category": "network", "aliases": ["App Gateway", "AGW"] },
+    { "service": "Azure Front Door", "moveName": "グローバルドア", "feature": "世界中の入口から素早く最適な道へ導く。", "category": "network", "aliases": ["Front Door", "AFD"] },
+    { "service": "Azure Firewall", "moveName": "バリアファイア", "feature": "危ない通信を遮り、通すべき流れを守る。", "category": "network" },
+    { "service": "Azure DNS", "moveName": "ネームコンパス", "feature": "名前から目的地を見つける案内力。", "category": "network" },
+
+    { "service": "Azure Monitor", "moveName": "ウォッチアイ", "feature": "システムの状態を見続け、変化に気づく。", "category": "observability" },
+    { "service": "Log Analytics", "moveName": "ログスコープ", "feature": "大量の記録から意味のある兆しを探す。", "category": "observability" },
+    { "service": "Application Insights", "moveName": "パルストレース", "feature": "アプリの動きや痛みを細かく追跡する。", "category": "observability", "aliases": ["App Insights"] },
+    { "service": "Defender for Cloud", "moveName": "ガードスキャン", "feature": "危険な構成や脅威を見つけて備える。", "category": "security", "aliases": ["MDC"] },
+    { "service": "Azure Policy", "moveName": "ポリシールーン", "feature": "守るべきルールをクラウド全体に刻む。", "category": "governance" },
+
+    { "service": "Azure OpenAI", "moveName": "コトダマブースト", "feature": "言葉の力で発想や作業を加速させる。", "category": "ai", "aliases": ["AOAI"] },
+    { "service": "Azure AI Search", "moveName": "スターマップ", "feature": "散らばる情報から進むべき手がかりを探す。", "category": "ai" },
+    { "service": "Azure AI Services", "moveName": "センスプリズム", "feature": "見る・聞く・読む力をアプリに与える。", "category": "ai", "aliases": ["Cognitive Services"] },
+    { "service": "Document Intelligence", "moveName": "ドキュスキャン", "feature": "文書から構造と意味を読み取る。", "category": "ai" },
+    { "service": "Speech Service", "moveName": "ボイスエコー", "feature": "声を文字へ、文字を声へ自在に変える。", "category": "ai" },
+    { "service": "Translator", "moveName": "ランゲージブリッジ", "feature": "言葉の壁を越えて会話をつなぐ。", "category": "ai" },
+    { "service": "Azure Machine Learning", "moveName": "モデルフォージ", "feature": "データからモデルを鍛え、予測力を育てる。", "category": "ai", "aliases": ["AzureML", "AML"] },
+    { "service": "Bot Service", "moveName": "トークスピリット", "feature": "対話する相棒を作り、ユーザーに寄り添う。", "category": "ai" },
+
+    { "service": "Data Factory", "moveName": "データパイプ", "feature": "データの流れを組み立て、必要な場所へ運ぶ。", "category": "data", "aliases": ["ADF"] },
+    { "service": "Synapse Analytics", "moveName": "シナプスリンク", "feature": "大規模データを集め、洞察へつなげる。", "category": "data" },
+    { "service": "Azure Databricks", "moveName": "ノートスパーク", "feature": "データとコードを合わせて分析を進める。", "category": "data" },
+    { "service": "Purview", "moveName": "データマップ", "feature": "データの所在と意味を整理して見える化する。", "category": "governance" },
+
+    { "service": "Azure Backup", "moveName": "セーブバック", "feature": "大切な状態を残し、必要な時に戻す。", "category": "ops" },
+    { "service": "Azure Site Recovery", "moveName": "リカバリールート", "feature": "もしもの時に別の場所で再び立ち上がる。", "category": "ops", "aliases": ["ASR"] },
+    { "service": "Azure Automation", "moveName": "オートギア", "feature": "繰り返し作業を仕組みに任せる。", "category": "ops" },
+    { "service": "Bicep", "moveName": "デクラルーン", "feature": "望む姿を宣言し、環境を整える。", "category": "iac" }
+  ],
+  "fallback": {
+    "weakness": {
+      "service": "Azure Kubernetes Service",
+      "moveName": "クラスターコール",
+      "note": "入力に苦手サービスが無い場合、得意サービスと異なるカテゴリの代表として採用する。"
+    }
+  }
+}

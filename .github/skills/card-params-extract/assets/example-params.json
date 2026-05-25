@@ -1,0 +1,86 @@
+{
+  "schema_version": "0.1",
+  "source_file": "input/インタビュー_田中太郎.txt",
+  "sequence": "002",
+  "folder_name": "002_tanaka_taro",
+  "trainer": {
+    "real_name": "田中 太郎",
+    "real_name_kana": "たなか たろう",
+    "western_name": "テオ・フィールドハート（田中 太郎）",
+    "department": "クラウド技術本部",
+    "recorder": "山田 静香"
+  },
+  "creature": {
+    "primary_name": "ハシリビ",
+    "alias": "朱火の即興ハヤブサ",
+    "taxonomy": {
+      "class": "創発類",
+      "genus": "速駆ハヤブサ属",
+      "species": "即興種",
+      "sentence": "創発類の一種で、速駆ハヤブサ属の即興種として分類される。"
+    },
+    "types": ["創発", "行動"],
+    "rarity": 4,
+    "stats": {
+      "endurance": 70,
+      "drive": 92,
+      "observation": 75,
+      "burst": 95,
+      "empathy": 65,
+      "thinking": 70,
+      "peaks": ["drive", "burst"]
+    },
+    "moves": {
+      "signature": {
+        "name": "イベントトリガー",
+        "azure_service": "Azure Functions",
+        "power": 85,
+        "description": "イベントを察知した瞬間に処理を駆動。場の停滞を素早く解き、議論を動くプロトに変える。"
+      },
+      "hidden": {
+        "name": "ハシリギメ",
+        "trigger": "雑な相談を受けたとき",
+        "power": 95,
+        "description": "特性：ハシリギメ（曖昧な相談を受けた瞬間、その場でデモを立ち上げて合意形成を加速する）。"
+      }
+    },
+    "affinity": {
+      "weak": {
+        "tags": ["長時間座学"],
+        "note": "長時間の座学で修行中。整理役の経験者と組むと一気に成長する。"
+      },
+      "resist": {
+        "tags": ["突発負荷", "曖昧な仕様"],
+        "note": "突発負荷と曖昧な仕様下で真価を発揮し、初動の速さで局面を切り拓く。"
+      }
+    },
+    "evolution": {
+      "previous": "ハシリコ",
+      "current": "ハシリビ",
+      "next": "ハシリビノタイショウ"
+    },
+    "flavor_quote": "議論を、走るプロトに変える瞬発の火。",
+    "entries": {
+      "classification": "創発類の一種で、速駆ハヤブサ属の即興種として分類される。観察より先に走り出し、走りながら考えるという珍しい行動様式を持つ。",
+      "appearance": "羽の縁にあざやかな朱の差し色を帯び、足元には小さな炎のような模様が灯る。全体に中型で身軽な姿。",
+      "habitat": "朝の河川敷や、走り出しの直線道路の上空。新しいガジェットや試作環境のそばに居着く。",
+      "food": "辛口エナジードリンクと激辛の発酵食品。刺激のある栄養を素早く取り込む。",
+      "personality": "ノリが良く、思いついた瞬間に飛び出す。試した後は静かに検証ノートを書き溜める一面も持つ。",
+      "behavior": "突発的な障害や曖昧な相談を察知すると、先頭で短いデモを描いて場を動かす。動くものを差し出すことで合意形成を促す。",
+      "growth": "雑な相談と、その場で動かせる小さな環境を与えられるほど加速度的に成長する。",
+      "observation_note": "「走りながら考える」を体現する一個体。停滞した議論を一発のデモで動かす瞬発力で観察された。"
+    }
+  },
+  "image_prompt": {
+    "creature_concept": "a small fictional falcon-like creature with sneaker-shaped feet, original design, not a real species",
+    "key_traits": ["fast", "improvising", "rhythmic", "warm", "agile"],
+    "colors": ["vermillion red", "morning-sky pale blue", "ember orange"],
+    "posture": "mid-stride, forward-leaning, ready to dash on a straight road",
+    "features": ["vermillion-trimmed wing edges", "tiny ember-like markings on feet", "sleek mid-size body"],
+    "mood": "energetic, friendly, dignified, dawn-fresh",
+    "negative": ["humanoid", "human face", "weapons", "photorealistic raptor", "blood", "dark or scary tone", "text", "logos"],
+    "size": "1024x1024",
+    "quality": "medium",
+    "model_recommendation": "gpt-image-2"
+  }
+}

@@ -1,0 +1,18 @@
+# Local secrets (Azure OpenAI / Foundry credentials etc.)
+.env
+.env.local
+.env.*.local
+
+# Interview source files may contain personal information.
+input/*
+!input/.gitkeep
+
+# Generated card artifacts.
+output/*
+!output/.gitkeep
+
+# Python
+.venv/
+__pycache__/
+*.pyc
+.pytest_cache/
