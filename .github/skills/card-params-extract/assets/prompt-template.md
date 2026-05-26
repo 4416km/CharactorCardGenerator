@@ -1,7 +1,7 @@
 # いきもの図鑑カード画像プロンプト雛形
 
-インタビュー記録から本テンプレートの `{{...}}` を埋めて画像プロンプトを構築する。
-最終的なプロンプトは英語で出力する（GPT-Image系は英語プロンプトで安定しやすいため）。
+いきもの図鑑カード用のキャラクター画像プロンプトを組み立てるための雛形。
+インタビュー記録から抽出した項目で `{{...}}` を埋め、最終的な英語プロンプトを作る。
 
 ## 共通スタイル（固定）
 
@@ -13,7 +13,7 @@
 
 ## 可変パート（雛形）
 
-```
+```text
 Creature concept: {{creature_concept}}
 Inspired by traits: {{key_traits}}
 Color palette: {{colors}}
@@ -37,11 +37,11 @@ Vibe / mood: {{mood}}
 
 - 実在の人物名・会社名・サービス名を直接書かない
 - 「Pokemon」「Pikachu」など既存IPの名称を書かない
-- 「AI画像で避けたい表現」に挙げられた要素はNegativeとして明示
+- 「AI画像で避けたい表現」に挙げられた要素は Negative として明示する
 
 ## 出力例（参考）
 
-```
+```text
 A friendly creature-encyclopedia illustration in the style of a modern monster-collecting card game.
 Single original fictional creature, centered on a pale mint background, soft digital painting,
 no text, no logos.

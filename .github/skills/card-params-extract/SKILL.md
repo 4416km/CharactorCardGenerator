@@ -168,7 +168,7 @@ argument-hint: 'input フォルダ内のインタビューファイル名（例:
 | `creature.affinity` | 1〜3 タグ、前向き表現 | §3.6 / §3.12 |
 | `creature.evolution` | 前形態（簡略）→現→次（拡張） | §3.13 |
 | `creature.flavor_quote` | 20〜35 字、観察者コメントなどから | §3.14 |
-| `image_prompt.*` | §1 「動物の例え」「好きな色」 / §4 「この人を動物に例えると？」「似あう色は？」中心。英語キーワード | §3.15 / gpt-image-2 スキル assets/prompt-template.md |
+| `image_prompt.*` | §1 「動物の例え」「好きな色」 / §4 「この人を動物に例えると？」「似あう色は？」中心。英語キーワード | §3.15 / card-params-extract assets/prompt-template.md |
 
 ルールの詳細は [references/param-generation-rules.md](./references/param-generation-rules.md) を参照。
 
@@ -240,6 +240,8 @@ argument-hint: 'input フォルダ内のインタビューファイル名（例:
 ## 画像生成プロンプト（`image-prompt.md`）
 
 `params.image_prompt.final_prompt` を主役にした、後段の画像生成スキル向け単独ファイル。Markdown 内のコードブロック部分は、そのままプロンプトとして利用される想定。
+
+カード用途のプロンプト構造は [assets/prompt-template.md](./assets/prompt-template.md) を基準にする。画像 API 呼び出し自体は [gpt-image-2](../gpt-image-2/SKILL.md) の責務であり、このセクションではカード固有の文面だけを定義する。
 
 ### フォーマット
 
@@ -350,7 +352,7 @@ python .github/skills/gpt-image-2/scripts/generate.py `
 
 - パラメータ生成ルール: [references/param-generation-rules.md](./references/param-generation-rules.md)
 - 画像生成スキル: [gpt-image-2/SKILL.md](../gpt-image-2/SKILL.md)
-- 画像プロンプト雛形: [gpt-image-2/assets/prompt-template.md](../gpt-image-2/assets/prompt-template.md)
+- 画像プロンプト雛形: [assets/prompt-template.md](./assets/prompt-template.md)
 - スキーマ例: [assets/example-params.json](./assets/example-params.json)
 
 ## 注意

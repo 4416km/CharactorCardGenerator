@@ -8,7 +8,7 @@
 
 - `.github/skills/`: Copilot Agent 用スキル
   - `card-params-extract`: インタビューから `params.json` / `image-prompt.md` / `extraction-log.md` を生成
-  - `gpt-image-2`: Azure OpenAI / Foundry の GPT-Image 系モデルで PNG を生成
+  - `gpt-image-2`: Azure OpenAI / Foundry の GPT-Image 系モデルで任意プロンプトから画像を生成
   - `card-render`: `params.json` と `creature.png` から `card.html` を生成
   - `card-pipeline`: インタビューから抽出・画像生成・HTML レンダリングまでまとめて実行
 - `reference/`: 入力テンプレート、Azure サービス別わざ表、カード CSS
@@ -43,13 +43,13 @@ AZURE_OPENAI_IMAGE_MODEL=gpt-image-2
 3. `output/<folder>/params.json` と `output/<folder>/image-prompt.md` ができたら、画像と HTML を生成します。
 
 ```powershell
-python .github/skills/card-pipeline/scripts/build_card.py --folder output/<folder> --model <your-image-model>
+python .github/skills/card-pipeline/scripts/build_card.py --folder output/<folder>
 ```
 
 画像を作り直したい場合:
 
 ```powershell
-python .github/skills/card-pipeline/scripts/build_card.py --folder output/<folder> --force-image --model <your-image-model>
+python .github/skills/card-pipeline/scripts/build_card.py --folder output/<folder> --force-image
 ```
 
 HTML だけ作り直したい場合:

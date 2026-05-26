@@ -19,7 +19,7 @@ argument-hint: 'input フォルダ内のインタビューファイル名（例:
 ## 前提
 
 - 入力: `input/インタビュー_*.txt` が存在（テンプレート原本: [reference/interview-template.txt](../../../reference/interview-template.txt) ／ パラメータ生成ルール: [param-generation-rules.md](../card-params-extract/references/param-generation-rules.md) §1）
-- [card-params-extract](../card-params-extract/SKILL.md) / [gpt-image-2](../gpt-image-2/SKILL.md) / [card-render](../card-render/SKILL.md) の前提を満たしている（特に gpt-image-2 の Azure OpenAI 環境変数）
+- [card-params-extract](../card-params-extract/SKILL.md) / [gpt-image-2](../gpt-image-2/SKILL.md) / [card-render](../card-render/SKILL.md) の前提を満たしている
 - Python 3.11 系（標準ライブラリのみ）
 
 ## 手順（エージェントの動き）
@@ -42,14 +42,13 @@ argument-hint: 'input フォルダ内のインタビューファイル名（例:
      python .github/skills/gpt-image-2/scripts/generate.py `
        --prompt-file output/<folder>/image-prompt.md `
        --out output/<folder>/creature.png `
-       --model <ユーザー指定モデル名> `
        --size 1024x1024 `
        --quality medium
      ```
-   - `generate.py` はルート `.env` を**スクリプト内部で自動的に読み込む**ため、エージェントが事前に `.env` の存在確認やシェル環境変数の検証を行う必要はない。`.env` は `.gitignore` 対象のため `file_search` では見つからないことがある。**そのまま実行し、エラーが出た場合のみユーザーへ確認する**こと。
-   - モデル名はユーザーが `--model` で指定した名前、または `.env` / 環境変数の `AZURE_OPENAI_IMAGE_MODEL` / `AZURE_OPENAI_IMAGE_DEPLOYMENT` の値だけを使う。未指定時はエラー停止し、エージェント判断で補完しない。
+   - `image-prompt.md` の中身は [card-params-extract](../card-params-extract/SKILL.md) がカード用途向けに構成したものをそのまま使う。
+   - モデル選択・認証・API モード・失敗時の解釈は [gpt-image-2](../gpt-image-2/SKILL.md) の責務とし、本スキルでは扱わない。
    - 既に `creature.png` がある場合は **スキップ**（ユーザーが明示的に再生成を求めた場合のみ上書き）。
-   - API エラー時は stderr の Azure 側メッセージを抜粋提示し、ステップ C は続行（壊れた `<img>` の状態で `card.html` を出す）。`unknown_model` の場合も別モデルへ自動リトライせず、ユーザーにモデル名の修正を依頼する。
+   - API エラー時は stderr のメッセージを抜粋提示し、ステップ C は続行（壊れた `<img>` の状態で `card.html` を出す）。
 
 4. **ステップ C: HTML レンダリング**
    - [card-render](../card-render/SKILL.md) の `render_card.py` を呼ぶ:
@@ -79,12 +78,10 @@ python .github/skills/card-pipeline/scripts/build_card.py `
 | 引数 | 既定値 | 説明 |
 |------|--------|------|
 | `--folder` | 必須 | 対象フォルダ（`output/<###>_<name>/`） |
-| `--model` | なし | 画像モデル。未指定時は `AZURE_OPENAI_IMAGE_MODEL` / `AZURE_OPENAI_IMAGE_DEPLOYMENT` を使い、それも無ければエラー |
 | `--size` | `1024x1024` | 画像サイズ |
 | `--quality` | `medium` | 画像品質 |
 | `--force-image` | off | 既存 `creature.png` を上書き再生成 |
 | `--skip-image` | off | 画像生成をスキップして HTML のみ作る |
-| `--api-mode` | `v1` | `v1` / `deployment` |
 
 ## エラーハンドリング
 
