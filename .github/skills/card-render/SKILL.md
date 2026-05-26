@@ -6,7 +6,7 @@ argument-hint: 'output/ 配下の対象フォルダ名（例: 002_tanaka_taro）
 
 # card-render: いきものカード HTML レンダリングスキル
 
-[card-params-extract](../card-params-extract/SKILL.md) が出力した `params.json` と、[gpt-image-2](../gpt-image-2/SKILL.md) が生成した `creature.png` をもとに、[`reference/zukan-card.css`](../../../reference/zukan-card.css) に対応した 1 ページ HTML (`card.html`) を出力する。
+[card-params-extract](../card-params-extract/SKILL.md) が出力した `params.json` と、[gpt-image-2](../gpt-image-2/SKILL.md) が生成した `creature.png` をもとに、[`reference/zukan-card.css`](../../../reference/zukan-card.css) の内容を埋め込んだ 1 ページ HTML (`card.html`) を出力する。
 
 このスキルは **HTML レンダリングだけ** を担当する。画像生成は行わない。インタビュー抽出から画像生成、HTML 生成までをまとめて行う場合は [card-pipeline](../card-pipeline/SKILL.md) を使う。
 
@@ -14,7 +14,7 @@ argument-hint: 'output/ 配下の対象フォルダ名（例: 002_tanaka_taro）
 
 - パラメータ抽出済み（`output/<###>_<name>/params.json` あり）の人物について、`card.html` だけを生成
 - `params.json` や `creature.png` を更新した後、HTML だけ作り直す
-- 仕上がった `card.html` を `reference/zukan-card.css` 直下で開いて目視確認
+- 仕上がった `card.html` を単体ファイルとして開いて目視確認
 
 ## 前提
 
@@ -42,7 +42,7 @@ argument-hint: 'output/ 配下の対象フォルダ名（例: 002_tanaka_taro）
        --out output/<folder>/card.html
      ```
    - スクリプトは `params.json` を読み、[`reference/zukan-card.css`](../../../reference/zukan-card.css) のクラス体系に沿った 1 ページ HTML を出力する
-   - `card.html` から画像は `./creature.png` 相対参照、CSS は `../../reference/zukan-card.css` 相対参照
+   - `card.html` から画像は `./creature.png` 相対参照、CSS は `reference/zukan-card.css` の内容を `style` タグへ埋め込む
    - 既存 `card.html` は **常に上書き**（パラメータ更新時に追従させるため）
 
 4. **完了報告**
@@ -56,7 +56,7 @@ argument-hint: 'output/ 配下の対象フォルダ名（例: 002_tanaka_taro）
 |---------------|--------|------|
 | 引数 | — | フォルダ名 (`002_tanaka_taro`) または `params.json` パス |
 | `--image` | `creature.png` | HTML から見た画像の相対パス |
-| `--css` | `../../reference/zukan-card.css` | HTML から見た CSS の相対パス |
+| `--css` | `../../reference/zukan-card.css` | 埋め込み元 CSS ファイルのパス |
 
 ## レンダラの仕様
 

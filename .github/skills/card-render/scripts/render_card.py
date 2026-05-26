@@ -9,7 +9,7 @@
                           --css ../../reference/zukan-card.css
 
 出力 HTML は reference/zukan-card.css のクラス体系に準拠した 1 ページ構成。
-画像は --image（既定 creature.png）相対参照、CSS は --css（既定 ../../reference/zukan-card.css）相対参照。
+画像は --image（既定 creature.png）相対参照、CSS は --css で指定したファイル内容を style タグとして埋め込む。
 """
 
 from __future__ import annotations
@@ -168,7 +168,7 @@ def render_entries(entries: dict) -> str:
     return "\n      ".join(parts)
 
 
-def render(params: dict, image_rel: str, css_rel: str) -> str:
+def render(params: dict, image_rel: str, css_text: str) -> str:
     trainer = params.get("trainer", {})
     creature = params.get("creature", {})
     seq = params.get("sequence", "000")
@@ -219,13 +219,17 @@ def render(params: dict, image_rel: str, css_rel: str) -> str:
     if not caption:
         caption = f"{real_name}{('（' + real_kana + '）') if real_kana else ''} の内面を架空のいきものとして描写。価値観・思考癖・仕事の進め方やこだわりを反映した内面生物。"
 
+    embedded_css = css_text.replace("</style", "<\\/style")
+
     return f"""<!DOCTYPE html>
 <html lang="ja">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>いきもの図鑑 {esc(primary_name)}</title>
-<link rel="stylesheet" href="{esc(css_rel)}">
+<style>
+{embedded_css}
+</style>
 </head>
 <body>
 <main>
@@ -325,7 +329,7 @@ def main() -> int:
     parser.add_argument(
         "--css",
         default="../../reference/zukan-card.css",
-        help="HTML から見た CSS の相対パス（既定: ../../reference/zukan-card.css）",
+        help="埋め込み元 CSS ファイルのパス。存在しない場合は出力 HTML からの相対パスとしても解決を試みる",
     )
     args = parser.parse_args()
 
@@ -337,8 +341,15 @@ def main() -> int:
     except json.JSONDecodeError as e:
         sys.exit(f"ERROR: params.json のパースに失敗: {e}")
 
-    html = render(params, args.image, args.css)
     out_path = Path(args.out)
+    css_path = Path(args.css)
+    if not css_path.is_file():
+        css_path = (out_path.parent / args.css).resolve()
+    if not css_path.is_file():
+        sys.exit(f"ERROR: CSS ファイルが見つかりません: {args.css}")
+
+    css_text = css_path.read_text(encoding="utf-8")
+    html = render(params, args.image, css_text)
     out_path.parent.mkdir(parents=True, exist_ok=True)
     out_path.write_text(html, encoding="utf-8")
     print(f"OK: {out_path}")
