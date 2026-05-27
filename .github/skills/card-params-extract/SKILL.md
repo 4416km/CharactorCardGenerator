@@ -45,16 +45,17 @@ argument-hint: 'input フォルダ内のインタビューファイル名（例:
 3. **出力フォルダ決定**
    - `input/` を `list_dir` し、対象ファイルの昇順位置から連番を確定
    - 氏名ローマ字（ヘボン式・小文字・スペース→`_`）でフォルダ名生成
+  - `observed_date` は入力から読まず、パラメータ抽出時の当日を `YYYY/MM/DD` 形式で設定
 4. **`reference/azure-move-map.json` と `reference/taxonomy-rules.md` を読む**
    - 「得意Azureサービス」「苦手Azureサービス」を照合し、わざ名・効果を引き当て
   - 類・属・種は `taxonomy-rules.md` の候補から、インタビュー内容に一番近いものを 1 つずつ選ぶ
 5. **[references/param-generation-rules.md](./references/param-generation-rules.md) §3 のルールに沿ってパラメータを決定**
    - 生物名 / 別名 / 分類 / トレーナー欧米名 / タイプ ×2 / レアリティ / 6軸ステータス / とくいわざ / ひでんわざ / 弱点 / 耐性 / 進化チェーン / フレーバー / 各項目テキスト
-  - このとき本文系フィールドは「わかりやすい一般語 + 少しユーモア」の方針で整える
+    - このとき本文系フィールドは「わかりやすい一般語 + 少しユーモア」の方針で整える
    - **情報不足検知**: 下記「§ 追加質問の判定基準」のいずれかに該当する場合、推測で埋めずに**手順 5.5（追加質問フェーズ）へ**
 6. **画像生成プロンプト用フィールドを構築**
-   - §1「自分を姿を動物に例えるなら」「自分の内面を動物に例えるなら」「好きな色」と §4「この人を動物に例えると？」「この人に似あう色は？」を主軸に `creature_concept / key_traits / colors / posture / features / mood / negative` を英語キーワード化
-   - 「動物の例え」と「色」のどちらかが §1/§4 双方とも欠落している場合は**手順 5.5（追加質問フェーズ）へ**
+    - §1「自分を姿を動物に例えるなら」「自分の内面を動物に例えるなら」「好きな色」と §4 各観察者メモの「この人を動物に例えると？」を主軸に `creature_concept / key_traits / colors / posture / features / mood / negative` を英語キーワード化
+    - 「動物の例え」が §1/§4 双方とも欠落している、または「好きな色」が欠落している場合は**手順 5.5（追加質問フェーズ）へ**
 7. **JSON とログを保存**
    - `create_file` で `output/<###>_<name>/params.json`（後述スキーマ）
    - `create_file` で `output/<###>_<name>/extraction-log.md`（後述フォーマット）
@@ -70,7 +71,7 @@ argument-hint: 'input フォルダ内のインタビューファイル名（例:
 {
   "schema_version": "0.1",
   "source_file": "input/インタビュー_田中太郎.txt",
-  "observed_date": "2026/05/22",
+  "observed_date": "2026/05/27",
   "sequence": "002",
   "folder_name": "002_tanaka_taro",
   "trainer": {
@@ -168,11 +169,11 @@ argument-hint: 'input フォルダ内のインタビューファイル名（例:
 | `creature.affinity` | 1〜3 タグ、前向き表現 | §3.6 / §3.12 |
 | `creature.evolution` | 前形態（簡略）→現→次（拡張） | §3.13 |
 | `creature.flavor_quote` | 20〜35 字、観察者コメントなどから | §3.14 |
-| `image_prompt.*` | §1 「動物の例え」「好きな色」 / §4 「この人を動物に例えると？」「似あう色は？」中心。英語キーワード | §3.15 / card-params-extract assets/prompt-template.md |
+| `image_prompt.*` | §1 「動物の例え」「好きな色」 / §4 各観察者メモの「この人を動物に例えると？」中心。英語キーワード | §3.15 / card-params-extract assets/prompt-template.md |
 
 ルールの詳細は [references/param-generation-rules.md](./references/param-generation-rules.md) を参照。
 
-`trainer.recorder` は単一名なら文字列、複数名なら配列または `、` 区切り文字列で保存してよい。HTML レンダラは複数名を個別行で表示する。
+`trainer.recorder` は §4 の各観察者メモの `記入者：` から取得する。単一名なら文字列、複数名なら配列または `、` 区切り文字列で保存してよい。HTML レンダラは複数名を個別行で表示する。
 
 ## 推論ログ（`extraction-log.md`）
 
@@ -193,7 +194,7 @@ argument-hint: 'input フォルダ内のインタビューファイル名（例:
   - 「田中」→ Fieldheart（田=field、中=heart のメタファー）
   - 採用: **テオ・フィールドハート（田中 太郎）**
 - 所属「クラウド技術本部」はトレーナー欄の所属として表示
-- 記録係「山田 静香」は params.trainer.recorder へ格納し、観察者欄へ表示。複数名の場合は配列または `、` 区切りで保持
+- §4 観察者メモの記入者「山田 静香」は params.trainer.recorder へ格納し、観察者欄へ表示。複数名の場合は配列または `、` 区切りで保持
 
 ## 2. 生物名・別名・分類
 - §1「最近ハマっている＝トレイルランニング」「§5 動物例＝ハヤブサ」「§5 すがた＝足元に炎」
@@ -310,7 +311,7 @@ python .github/skills/gpt-image-2/scripts/generate.py `
 | 必須欠落 | §0 の `対象者の名前（漢字/よみ）` `所属・チーム名` のいずれかが空 |
 | わざ決定不能 | §3「得意・好き・よく使うAzureサービス」が空、または `azure-move-map.json` に該当エントリなし |
 | 個性材料不足 | §2 + §4 + §6 の合計埋まり項目数が **5 項目未満** |
-| 画像材料不足 | §1「動物の例え」「好きな色」 と §4「この人を動物に例えると？」「似あう色」 が双方とも空欄 |
+| 画像材料不足 | §1「動物の例え」と §4 各観察者メモの「この人を動物に例えると？」が双方とも空欄、または §1「好きな色」が空欄 |
 | 矛盾検知 | §2 と §4 で「らしさ」が真逆（例: 「慎重」と「即断即決」）で、優先判断が付かない |
 
 ### 質問の出し方

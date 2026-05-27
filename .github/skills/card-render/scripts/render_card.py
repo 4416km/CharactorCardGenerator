@@ -18,6 +18,7 @@ import argparse
 import html as html_mod
 import json
 import sys
+from datetime import date
 from pathlib import Path
 
 TYPE_CLASS = {
@@ -173,6 +174,8 @@ def render(params: dict, image_rel: str, css_text: str) -> str:
     creature = params.get("creature", {})
     seq = params.get("sequence", "000")
     observed_date = str(params.get("observed_date", "") or "").strip()
+    if not observed_date:
+        observed_date = date.today().strftime("%Y/%m/%d")
     taxonomy = creature.get("taxonomy", {})
     stats = creature.get("stats", {})
     moves = creature.get("moves", {})
@@ -211,7 +214,7 @@ def render(params: dict, image_rel: str, css_text: str) -> str:
         else ""
     )
     observed_date_html = (
-        f'<small class="observed-date">観察日：{esc(observed_date)}</small>'
+        f'<small class="observed-date">生成日：{esc(observed_date)}</small>'
         if observed_date
         else ""
     )

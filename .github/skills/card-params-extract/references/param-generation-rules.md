@@ -13,14 +13,19 @@ card-params-extract / card-render / card-pipeline スキルから参照される
 - **テンプレート原本**: [reference/interview-template.txt](../../../../reference/interview-template.txt) を正とする
 
 ### 1.2 テンプレート見出し
-- メタヘッダ: `日付：` / `観察者：`
-- `■ 0. 基本情報`
-- `■ 1. 近況・素の姿`
-- `■ 2. 仕事での姿`
-- `■ 3. Azureとの関わり`
-- `■ 4. 観察者コメント`
+- メタヘッダなし。日付は入力せず、カード生成時に自動設定する
+- `■ 0. 基本情報（本人事前記入）`
+- `■ 1. 近況・素の姿（本人事前記入）`
+- `■ 2. 仕事での姿（本人事前記入）`
+- `■ 3. Azureとの関わり（本人事前記入）`
+- `■ 3.5 会話で深掘りできたら書く任意メモ`
+- `■ 4. 観察者コメント（グループディスカッション後に本人以外が記入）`（1人1ブロックの観察者メモ形式）
 
 ### 1.3 入力品質の前提
+- `■ 1`〜`■ 3` は本人が事前に記入し、`■ 4` はグループディスカッション後に本人以外のグループメンバー全員が1人1ブロックで記入する
+- 観察者名は冒頭には置かず、`■ 4` の各観察者メモの `記入者：` から取得する
+- `observed_date` は入力ファイルから抽出せず、カード生成時またはパラメータ抽出時の当日を `YYYY/MM/DD` 形式で設定する
+- `■ 3.5` は自己紹介や会話で深掘りできた場合に使う任意メモ。空欄でも可
 - 全項目埋まっていなくても可。空欄は他項目から AI 補完
 - ただし以下は必須:
   - `■ 0` の `対象者の名前（漢字/よみ）`
@@ -184,7 +189,7 @@ output/
 
 ### 3.14 フレーバー一言（flavor_quote）
 - 20〜35 字程度の短い一文キャッチコピー
-- 「観察者コメント」（特に「必ず残したい一言」）を一次ソースに、「近況・素の姿」「仕事での姿」を重ねて象徴化
+- 「観察者コメント」の各ブロックにある「必ず残したい一言」や「印象キーワード」を一次ソースに、「近況・素の姿」「仕事での姿」を重ねて象徴化
 - 例: 「先頭で叫ぶより、場に小さな灯りを置くタイプ。」
 - 難解な名言風にしすぎず、読んですぐ人物像が浮かぶことを優先する
 
@@ -198,8 +203,8 @@ representing a person's inner world (not a portrait, not a real animal, not any 
 Style: adorable original mascot character design, soft watercolor + clean anime line art,
 rounded silhouette, large gentle eyes, small expressive face, charming proportions,
 isolated subject on neutral light background, centered composition, full body view.
-Creature concept: {§1「自分を姿を動物に例えるなら」/「自分の内面を動物に例えるなら」 / §4「この人を動物に例えると？」}
-Primary color palette: {§1「好きな色」 / §4「この人に似あう色は？」}
+Creature concept: {§1「自分を姿を動物に例えるなら」/「自分の内面を動物に例えるなら」 / §4 各観察者メモの「この人を動物に例えると？」}
+Primary color palette: {§1「好きな色」}
 Mood: {§1 性格・行動の特徴 / §2 仕事での姿から抽出した形容詞 2〜3 個}
 Distinctive features: {§1「素の性格がわかるエピソード」/「人から言われたことがある意外な一面」から抽出した視覚特徴を箇条書き}
 Vibe / motion: {§1「落ち着く場所・シチュエーション」/ §2「力を発揮しやすい場面」から推測した動きのトーン}
