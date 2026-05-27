@@ -38,9 +38,39 @@ AZURE_OPENAI_IMAGE_MODEL=gpt-image-2
 
 ## 使い方
 
-1. `reference/interview-template.txt` をコピーし、`input/インタビュー_<名前>.txt` として保存します。
-2. VS Code Copilot Agent に、対象ファイルを指定して `card-params-extract` または `card-pipeline` を実行するよう依頼します。
-3. `output/<folder>/params.json` と `output/<folder>/image-prompt.md` ができたら、画像と HTML を生成します。
+基本的には、VS Code の Copilot Chat で **Agent モード**を開き、日本語で依頼します。
+
+たとえば、インタビューシートのひな型を作りたい場合:
+
+```text
+空野ひかりさんのインタビューシートのひな型を作ってください。
+```
+
+インタビューシートを埋めたあと、カードまで生成したい場合:
+
+```text
+空野ひかりさんのカードを生成してください。
+```
+
+既存のインタビュー記録を指定してカード化したい場合:
+
+```text
+input/インタビュー_空野ひかり.txt からカードを生成してください。
+```
+
+Agent は必要に応じて `card-params-extract` / `gpt-image-2` / `card-render` / `card-pipeline` の各スキルを使い、`output/<folder>/` に生成物を保存します。
+
+生成される主なファイル:
+
+- `output/<folder>/params.json`
+- `output/<folder>/extraction-log.md`
+- `output/<folder>/image-prompt.md`
+- `output/<folder>/creature.png`
+- `output/<folder>/card.html`
+
+### CLI で続きの処理を実行する場合
+
+`params.json` と `image-prompt.md` ができた後は、以下のコマンドでも画像と HTML を生成できます。
 
 ```powershell
 python .github/skills/card-pipeline/scripts/build_card.py --folder output/<folder>
@@ -57,14 +87,6 @@ HTML だけ作り直したい場合:
 ```powershell
 python .github/skills/card-pipeline/scripts/build_card.py --folder output/<folder> --skip-image
 ```
-
-生成される主なファイル:
-
-- `output/<folder>/params.json`
-- `output/<folder>/extraction-log.md`
-- `output/<folder>/image-prompt.md`
-- `output/<folder>/creature.png`
-- `output/<folder>/card.html`
 
 ## 直接実行できる CLI
 
