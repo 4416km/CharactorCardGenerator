@@ -107,3 +107,7 @@ python .github/skills/card-render/scripts/render_card.py `
 ├── README.md
 └── requirements.txt
 ```
+
+## ライセンス
+
+このリポジトリは MIT License で公開しています。詳細は [LICENSE](LICENSE) を参照してください。

@@ -1,7 +1,8 @@
 # Local secrets (Azure OpenAI / Foundry credentials etc.)
 .env
 .env.local
-.env.*.local
+.env.*
+!.env.example
 
 # Interview source files may contain personal information.
 input/*
