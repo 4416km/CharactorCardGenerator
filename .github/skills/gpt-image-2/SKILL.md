@@ -46,7 +46,7 @@ Python 依存: `requests` / `python-dotenv`（標準環境にない場合は `pi
      --out output/sample.png `
      --model <user-specified-model> `
      --size 1024x1024 `
-     --quality medium
+   --quality low
    ```
    - モデル名はユーザーが明示した名前を必ず使う。エージェント判断で別モデル名へ置き換えたり補完したりしない
    - `--model gpt-image-1.5` / `--model MAI-Image-2` などでモデル切替する場合も、ユーザー指定または `.env` の指定に従う（Foundry 上にデプロイ済みであること）
@@ -64,7 +64,7 @@ Python 依存: `requests` / `python-dotenv`（標準環境にない場合は `pi
 |------|--------|------|
 | `--model` | なし | `gpt-image-2` / `gpt-image-1.5` / `gpt-image-1` / `MAI-Image-2` など。Foundry/Azure OpenAI リソースにデプロイ済みの名前をユーザーが明示指定。未指定時は環境変数を見て、それも無ければエラー |
 | `--size` | `1024x1024` | `512x512` / `1024x1024` / `1024x1536` / `1536x1024` / `auto`（モデルごとにサポート範囲が異なる。512x512 未対応のモデル多し） |
-| `--quality` | `medium` | `low` / `medium` / `high` / `auto` |
+| `--quality` | `low` | `low` / `medium` / `high` / `auto` |
 | `--n` | `1` | 生成枚数 |
 | `--background` | （省略） | `transparent` 指定で透過PNG（gpt-image-1系のみ） |
 | `--output-format` | `png` | `png` / `jpeg` |

@@ -6,7 +6,7 @@
 
 使用例:
     python generate.py --prompt "a forest fox spirit" --out out.png --model gpt-image-1.5
-    python generate.py --prompt-file prompt.txt --out card.png --model gpt-image-1.5 --size 1024x1536 --quality high
+    python generate.py --prompt-file prompt.txt --out card.png --model gpt-image-1.5 --size 1024x1536 --quality low
     python generate.py --prompt "..." --out o.png --model gpt-image-1.5
     python generate.py --prompt "..." --out o.png --model MAI-Image-2
     python generate.py --prompt "..." --out sample.png --model gpt-image-1.5 --n 3
@@ -91,7 +91,7 @@ def main() -> int:
     parser.add_argument("--out", required=True, help="出力PNGパス")
     parser.add_argument("--size", default="1024x1024",
                         choices=["512x512", "1024x1024", "1024x1536", "1536x1024", "auto"])
-    parser.add_argument("--quality", default="medium",
+    parser.add_argument("--quality", default="low",
                         choices=["low", "medium", "high", "auto"])
     parser.add_argument("--n", type=int, default=1)
     parser.add_argument("--output-format", default="png", choices=["png", "jpeg"])

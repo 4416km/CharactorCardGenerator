@@ -1,7 +1,7 @@
 ---
 name: card-render
-description: 'output/<###>_<name>/params.json と creature.png をもとに、reference/zukan-card.css に対応したカード HTML (card.html) を生成するレンダリング専用スキル。画像生成は行わず、gpt-image-2 または card-pipeline で作成済みの creature.png を参照する。WHEN: いきものカードを HTML 化、params.json から card.html を生成、カードを再レンダリング、HTML だけ作り直す、いきもの図鑑カードの表示を更新。'
-argument-hint: 'output/ 配下の対象フォルダ名（例: 002_tanaka_taro）または params.json パス'
+description: 'output/<folder>/params.json と creature.png をもとに、reference/zukan-card.css に対応したカード HTML (card.html) を生成するレンダリング専用スキル。画像生成は行わず、gpt-image-2 または card-pipeline で作成済みの creature.png を参照する。WHEN: いきものカードを HTML 化、params.json から card.html を生成、カードを再レンダリング、HTML だけ作り直す、いきもの図鑑カードの表示を更新。'
+argument-hint: 'output/ 配下の対象フォルダ名（例: 260528143015_空野ひかり）または params.json パス'
 ---
 
 # card-render: いきものカード HTML レンダリングスキル
@@ -12,21 +12,21 @@ argument-hint: 'output/ 配下の対象フォルダ名（例: 002_tanaka_taro）
 
 ## 利用ケース
 
-- パラメータ抽出済み（`output/<###>_<name>/params.json` あり）の人物について、`card.html` だけを生成
+- パラメータ抽出済み（`output/<folder>/params.json` あり）の人物について、`card.html` だけを生成
 - `params.json` や `creature.png` を更新した後、HTML だけ作り直す
 - 仕上がった `card.html` を単体ファイルとして開いて目視確認
 
 ## 前提
 
-- `output/<###>_<name>/params.json` が存在（[card-params-extract](../card-params-extract/SKILL.md) で生成済み）
-- `output/<###>_<name>/creature.png` が存在（[gpt-image-2](../gpt-image-2/SKILL.md) で生成済み。未生成でも HTML は出力できるが画像は表示されない）
+- `output/<folder>/params.json` が存在（[card-params-extract](../card-params-extract/SKILL.md) で生成済み）
+- `output/<folder>/creature.png` が存在（[gpt-image-2](../gpt-image-2/SKILL.md) で生成済み。未生成でも HTML は出力できるが画像は表示されない）
 - `reference/zukan-card.css` が存在（本リポジトリに同梱されているカード共通スタイル）
 - Python 3.11 系（標準ライブラリのみで動作。追加依存なし）
 
 ## 手順
 
 1. **対象フォルダを確定する**
-   - 引数がフォルダ名（例 `002_tanaka_taro`）なら `output/<arg>/` を対象とする
+   - 引数がフォルダ名（例 `260528143015_空野ひかり`）なら `output/<arg>/` を対象とする
    - 引数が `params.json` の絶対/相対パスなら、その親フォルダを対象とする
    - `params.json` が無ければエラーで停止（先に `card-params-extract` を実行する旨を提示）
 
@@ -54,7 +54,7 @@ argument-hint: 'output/ 配下の対象フォルダ名（例: 002_tanaka_taro）
 
 | 引数 / フラグ | 既定値 | 説明 |
 |---------------|--------|------|
-| 引数 | — | フォルダ名 (`002_tanaka_taro`) または `params.json` パス |
+| 引数 | — | フォルダ名 (`260528143015_空野ひかり`) または `params.json` パス |
 | `--image` | `creature.png` | HTML から見た画像の相対パス |
 | `--css` | `../../reference/zukan-card.css` | 埋め込み元 CSS ファイルのパス |
 
@@ -71,7 +71,7 @@ argument-hint: 'output/ 配下の対象フォルダ名（例: 002_tanaka_taro）
 | ページ枠 | `.field-guide-page` | — |
 | 画像プレート | `.field-guide-plate` / `.specimen-frame` / `.creature-image` | `./creature.png` |
 | トレーナー/観察者枠 | `.guide-note-grid` / `.guide-note` / `.observed-date` / `.observer-comment` | `trainer.{western_name,real_name,real_name_kana,department,recorder}` / `observed_date` / `entries.observation_note` |
-| ヘッダ | `.field-guide-header` / `.specimen-number` | `primary_name` |
+| ヘッダ | `.field-guide-header` / `.specimen-number` / `.creature-alias` | `primary_name` / `alias` |
 | タイプ/レアリティ | `.creature-meta-row` / `.type-badge--<class>` / `.rarity-stars` | `types[]` / `rarity` |
 | 分類 | `.taxonomy-strip` | `taxonomy.class` / `taxonomy.genus` / `taxonomy.species` |
 | ステータス | `.stat-panel` / `.stat-row` / `.stat-row--peak` | `stats.{endurance,...}` / `stats.peaks` |

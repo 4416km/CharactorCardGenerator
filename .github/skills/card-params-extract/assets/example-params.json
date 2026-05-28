@@ -1,8 +1,10 @@
 {
   "schema_version": "0.1",
   "source_file": "input/インタビュー_田中太郎.txt",
-  "sequence": "002",
-  "folder_name": "002_tanaka_taro",
+  "source_interview_copy": "source/インタビュー_田中太郎.txt",
+  "observed_date": "2026/05/27",
+  "generated_at": "2026-05-27T14:30:15+09:00",
+  "folder_name": "260527143015_田中太郎",
   "trainer": {
     "real_name": "田中 太郎",
     "real_name_kana": "たなか たろう",
@@ -11,8 +13,8 @@
     "recorder": "山田 静香"
   },
   "creature": {
-    "primary_name": "ハシリビ",
-    "alias": "あかいろダッシュハヤブサ",
+    "primary_name": "ハヤビット",
+    "alias": "あかいろの先走り鳥",
     "taxonomy": {
       "class": "突破類",
       "genus": "直感属",
@@ -38,7 +40,7 @@
         "description": "イベントを察知した瞬間に処理を駆動。場の停滞を素早く解き、議論を動くプロトに変える。"
       },
       "hidden": {
-        "name": "ハシリギメ",
+        "name": "ハヤビギメ",
         "trigger": "雑な相談を受けたとき",
         "power": 95,
         "description": "ふわっとした相談を受けた瞬間、その場で小さな見本を作って話を前に進める。『とりあえず見てみよう』を作るひでんわざ。"
@@ -55,9 +57,9 @@
       }
     },
     "evolution": {
-      "previous": "ハシリコ",
-      "current": "ハシリビ",
-      "next": "ハシリビノタイショウ"
+      "previous": "ハヤビコ",
+      "current": "ハヤビット",
+      "next": "ハヤビット隊長"
     },
     "flavor_quote": "話しているうちに、もう走り出しているタイプ。",
     "entries": {
@@ -80,7 +82,7 @@
     "mood": "energetic, friendly, dignified, dawn-fresh",
     "negative": ["humanoid", "human face", "weapons", "photorealistic raptor", "blood", "dark or scary tone", "text", "logos"],
     "size": "1024x1024",
-    "quality": "medium",
+    "quality": "low",
     "model_recommendation": "gpt-image-2"
   }
 }

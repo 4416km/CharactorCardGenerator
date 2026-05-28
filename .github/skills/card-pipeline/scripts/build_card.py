@@ -6,14 +6,16 @@
         - 画像生成まわりの認証・モデル設定は gpt-image-2 側で解決できる
 
 使用例:
-        python build_card.py --folder output/003_suzuki_tsubasa
-        python build_card.py --folder output/003_suzuki_tsubasa --force-image
-        python build_card.py --folder output/003_suzuki_tsubasa --skip-image
+    python build_card.py --folder output/260528143015_鈴木つばさ
+    python build_card.py --folder output/260528143015_鈴木つばさ --force-image
+    python build_card.py --folder output/260528143015_鈴木つばさ --skip-image
 """
 
 from __future__ import annotations
 
 import argparse
+import json
+import shutil
 import subprocess
 import sys
 from pathlib import Path
@@ -30,11 +32,42 @@ def run(cmd: list[str]) -> int:
     return proc.returncode
 
 
+def copy_source_interview(params_path: Path, folder: Path) -> Path | None:
+    try:
+        params = json.loads(params_path.read_text(encoding="utf-8"))
+    except json.JSONDecodeError as exc:
+        sys.exit(f"ERROR: params.json のパースに失敗: {exc}")
+
+    source_value = str(params.get("source_file", "") or "").strip()
+    if not source_value:
+        print("[skip] params.source_file が空のため、元インタビューのコピーをスキップ")
+        return None
+
+    source_path = Path(source_value)
+    if not source_path.is_absolute():
+        source_path = REPO_ROOT / source_path
+    if not source_path.is_file():
+        print(f"[warn] 元インタビューが見つかりません: {source_path}", file=sys.stderr)
+        return None
+
+    dest_value = str(params.get("source_interview_copy", "") or "").strip()
+    dest_rel = Path(dest_value) if dest_value else Path("source") / source_path.name
+    if dest_rel.is_absolute() or ".." in dest_rel.parts:
+        print(f"[warn] source_interview_copy が相対パスではないため既定値を使います: {dest_value}", file=sys.stderr)
+        dest_rel = Path("source") / source_path.name
+
+    dest_path = folder / dest_rel
+    dest_path.parent.mkdir(parents=True, exist_ok=True)
+    shutil.copy2(source_path, dest_path)
+    print(f"[copy] 元インタビュー: {dest_path}")
+    return dest_path
+
+
 def main() -> int:
     ap = argparse.ArgumentParser(description="card-pipeline: 画像 + HTML まとめ実行")
-    ap.add_argument("--folder", required=True, help="対象フォルダ（output/<###>_<name>/）")
+    ap.add_argument("--folder", required=True, help="対象フォルダ（output/YYMMDDHHMMSS_<氏名漢字>/）")
     ap.add_argument("--size", default="1024x1024")
-    ap.add_argument("--quality", default="medium",
+    ap.add_argument("--quality", default="low",
                     choices=["low", "medium", "high", "auto"])
     ap.add_argument("--force-image", action="store_true",
                     help="既存 creature.png を上書き再生成")
@@ -53,6 +86,8 @@ def main() -> int:
 
     if not params_path.is_file():
         sys.exit(f"ERROR: {params_path} が見つかりません。先に card-params-extract を実行してください。")
+
+    source_copy_path = copy_source_interview(params_path, folder)
 
     python_exe = sys.executable
 
@@ -94,6 +129,8 @@ def main() -> int:
     print()
     print("=== 完了 ===")
     print(f"  params : {params_path}")
+    if source_copy_path:
+        print(f"  source : {source_copy_path}")
     print(f"  image  : {image_path} {'(skipped)' if args.skip_image else ''}")
     print(f"  card   : {card_path}")
     return 0

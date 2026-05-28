@@ -23,9 +23,12 @@ argument-hint: 'input フォルダ内のインタビューファイル名（例:
   - 固定わざ表: `reference/azure-move-map.json`（存在しない場合はわざ説明を AI 補完）
   - 類・属・種 選定ルール: `reference/taxonomy-rules.md`（分類は必ずこの固定語彙から選ぶ）
   - パラメータ生成ルール（生物名・分類・ステータス・わざ・進化チェーン等）: [references/param-generation-rules.md](./references/param-generation-rules.md) §3
-- 出力先: `output/{連番3桁}_{氏名ローマ字}/`
-  - 連番は `input/` 内のファイル名昇順ソートを基準に採番
-  - 既に同名フォルダがあればそれを再利用（params.json と extraction-log.md を上書き）
+- 出力先: `output/YYMMDDHHMMSS_{氏名漢字}/`
+  - `YYMMDDHHMMSS` は出力フォルダ作成時点のローカル時刻（例: `260528143015`）
+  - `{氏名漢字}` は `■ 0` の漢字表記から空白とファイル名禁止文字を除いたもの（例: `空野 ひかり` → `空野ひかり`）
+  - 連番と氏名ローマ字は使わない
+  - 同じ人物を再生成した場合も新しい時刻フォルダを作る。既存フォルダ再利用はユーザーが明示した場合のみ
+  - 元インタビューは `source/` 配下へ同名コピーし、人物フォルダを丸ごと移せば成果物と入力原本が一緒に動く状態にする
 
 ## 言葉づかいルール
 
@@ -43,8 +46,9 @@ argument-hint: 'input フォルダ内のインタビューファイル名（例:
 2. **必須項目チェック**
   - `対象者の名前（漢字/よみ）`, `所属・チーム名`, `得意・好き・よく使うAzureサービス` のいずれかが空なら**追加質問フェーズ（手順 2.5）へ**
 3. **出力フォルダ決定**
-   - `input/` を `list_dir` し、対象ファイルの昇順位置から連番を確定
-   - 氏名ローマ字（ヘボン式・小文字・スペース→`_`）でフォルダ名生成
+  - 現在時刻から `YYMMDDHHMMSS` を作る
+  - `■ 0` の対象者名の漢字表記から空白とファイル名禁止文字を除き、`YYMMDDHHMMSS_{氏名漢字}` でフォルダ名生成
+  - 例: 2026-05-28 14:30:15 に `空野 ひかり` を生成 → `output/260528143015_空野ひかり/`
   - `observed_date` は入力から読まず、パラメータ抽出時の当日を `YYYY/MM/DD` 形式で設定
 4. **`reference/azure-move-map.json` と `reference/taxonomy-rules.md` を読む**
    - 「得意Azureサービス」「苦手Azureサービス」を照合し、わざ名・効果を引き当て
@@ -57,9 +61,10 @@ argument-hint: 'input フォルダ内のインタビューファイル名（例:
     - §1「自分を姿を動物に例えるなら」「自分の内面を動物に例えるなら」「好きな色」と §4 各観察者メモの「この人を動物に例えると？」を主軸に `creature_concept / key_traits / colors / posture / features / mood / negative` を英語キーワード化
     - 「動物の例え」が §1/§4 双方とも欠落している、または「好きな色」が欠落している場合は**手順 5.5（追加質問フェーズ）へ**
 7. **JSON とログを保存**
-   - `create_file` で `output/<###>_<name>/params.json`（後述スキーマ）
-   - `create_file` で `output/<###>_<name>/extraction-log.md`（後述フォーマット）
-   - `create_file` で `output/<###>_<name>/image-prompt.md`（後述フォーマット）
+  - `create_file` で `output/<YYMMDDHHMMSS_氏名漢字>/params.json`（後述スキーマ）
+  - `create_file` で `output/<YYMMDDHHMMSS_氏名漢字>/extraction-log.md`（後述フォーマット）
+  - `create_file` で `output/<YYMMDDHHMMSS_氏名漢字>/image-prompt.md`（後述フォーマット）
+  - `create_file` で `output/<YYMMDDHHMMSS_氏名漢字>/source/<元インタビューファイル名>`（入力ファイルの内容をそのままコピー）
      - `params.image_prompt.final_prompt` を本文として、メタ情報（モデル / サイズ / 品質 / negative）と画像生成コマンド例を併記
      - 後段の [gpt-image-2](../gpt-image-2/SKILL.md) スキルが `--prompt-file` で直接参照できる形にする
 8. **完了報告**
@@ -71,9 +76,10 @@ argument-hint: 'input フォルダ内のインタビューファイル名（例:
 {
   "schema_version": "0.1",
   "source_file": "input/インタビュー_田中太郎.txt",
+  "source_interview_copy": "source/インタビュー_田中太郎.txt",
   "observed_date": "2026/05/27",
-  "sequence": "002",
-  "folder_name": "002_tanaka_taro",
+  "generated_at": "2026-05-27T14:30:15+09:00",
+  "folder_name": "260527143015_田中太郎",
   "trainer": {
     "real_name": "田中 太郎",
     "real_name_kana": "たなか たろう",
@@ -82,8 +88,8 @@ argument-hint: 'input フォルダ内のインタビューファイル名（例:
     "recorder": "山田 静香"
   },
   "creature": {
-    "primary_name": "ハシリビ",
-    "alias": "あかいろダッシュハヤブサ",
+    "primary_name": "ハヤビット",
+    "alias": "あかいろの先走り鳥",
     "taxonomy": {
       "class": "突破類",
       "genus": "直感属",
@@ -109,7 +115,7 @@ argument-hint: 'input フォルダ内のインタビューファイル名（例:
         "description": "..."
       },
       "hidden": {
-        "name": "ハシリギメ",
+        "name": "ハヤビギメ",
         "trigger": "雑な相談を受けたとき",
         "power": 95,
         "description": "..."
@@ -121,8 +127,8 @@ argument-hint: 'input フォルダ内のインタビューファイル名（例:
     },
     "evolution": {
       "previous": "ハシリコ",
-      "current": "ハシリビ",
-      "next": "ハシリビノタイショウ"
+      "current": "ハヤビット",
+      "next": "ハヤビット隊長"
     },
     "flavor_quote": "話しているうちに、もう走り出しているタイプ。",
     "caption": "会議の途中で「ちょっと作ってきます」と本当に走り出すタイプのハヤブサ。雑な相談を投げかけた瞬間に足元の炎がぼっと燃え上がり、気づくと動くデモが置いてある。長時間の検討会には弱く、座って 3 時間目で羽の縁の朱色がしんぼり始める。",
@@ -146,7 +152,7 @@ argument-hint: 'input フォルダ内のインタビューファイル名（例:
     "mood": "energetic, friendly, dignified",
     "negative": ["humanoid", "weapons", "photorealistic raptor", "blood", "dark tone"],
     "size": "1024x1024",
-    "quality": "medium",
+    "quality": "low",
     "model_recommendation": "gpt-image-2"
   }
 }
@@ -157,8 +163,8 @@ argument-hint: 'input フォルダ内のインタビューファイル名（例:
 | フィールド | 由来 | ルール |
 |-----------|------|------|
 | `trainer.western_name` | §0 `対象者の名前（漢字/よみ）` から音派生 + 漢字意味派生 | §3.7 |
-| `creature.primary_name` | カタカナ 8〜20 文字。エピソード語感由来 | §3.1 |
-| `creature.alias` | `{色or状態}の{動作}{生物}` | §3.2 |
+| `creature.primary_name` | カタカナ 5〜10 文字。短く親しみやすい呼び名。動物名・特徴語の直入れは避ける | §3.1 |
+| `creature.alias` | 短い主名を補足する二つ名。動物モチーフや特徴説明は主にこちらへ回す | §3.2 |
 | `creature.taxonomy` | `reference/taxonomy-rules.md` から選ぶ類・属・種 | §3.3 |
 | `creature.caption` | カード画像下のキャプション。2～3 文・ユーモア調 | §3.5 |
 | `creature.types` | カード表示用タイプバッジ。分類とは別に 2 属性付与 | §3.8 |
@@ -183,8 +189,9 @@ argument-hint: 'input フォルダ内のインタビューファイル名（例:
 # 抽出ログ: インタビュー_田中太郎.txt
 
 ## メタ
-- 連番: 002
-- 出力フォルダ: output/002_tanaka_taro
+- 出力フォルダ: output/260527143015_田中太郎
+- 生成時刻: 2026-05-27T14:30:15+09:00
+- 元インタビューコピー: source/インタビュー_田中太郎.txt
 - 必須項目チェック: OK
 - 抽出日時: 2026-05-22
 
@@ -197,9 +204,15 @@ argument-hint: 'input フォルダ内のインタビューファイル名（例:
 - §4 観察者メモの記入者「山田 静香」は params.trainer.recorder へ格納し、観察者欄へ表示。複数名の場合は配列または `、` 区切りで保持
 
 ## 2. 生物名・別名・分類
-- §1「最近ハマっている＝トレイルランニング」「§5 動物例＝ハヤブサ」「§5 すがた＝足元に炎」
-  → "走る + 炎" を主モチーフとし、**生物名「ハシリビ」** を採用
-- 別名: §5 似合う色「朱赤」+ §2 「即興のプロトタイプ」→ **「あかいろダッシュハヤブサ」**
+- §1「最近ハマっている＝トレイルランニング」、§5 動物例「ハヤブサ」、§5 すがた「足元に炎」、§2「即興のプロトタイプ」を命名材料として抽出
+- `primary_name` に入れる要素: 「速い」「火がつくような初動」の語感のみ。`ハヤブサ` そのもの、炎、プロトタイプは直接的なので主名から外す
+- 候補比較:
+  - ハヤビット（5文字）: 速さ + 小さな火の語感。短く呼びやすく、動物名を含まない
+  - ハシリビ（4文字）: 親しみはあるが、5文字未満なので不採用
+  - ハヤブサビ（5文字）: 動物名がそのまま入るため不採用
+  - プロトビ（4文字）: 仕事特徴が直接的で、5文字未満なので不採用
+- 文字数 5〜10 文字、動物名・特徴語・Azure サービス名の直入れなしを確認し、**生物名「ハヤビット」** を採用
+- 別名: 主名から外した「朱赤」「走り出す」「鳥モチーフ」を補い、**「あかいろの先走り鳥」** を採用
 - 類: §2「走り出して考える」= 前に出る行動が強い → `reference/taxonomy-rules.md` から **突破類** を選定
 - 属: §2「議論より先にデモ」= 感覚で飛び、試して確かめる → **直感属** を選定
 - 種: 場を一気に動かす存在感 → **起爆種** を選定
@@ -214,7 +227,7 @@ argument-hint: 'input フォルダ内のインタビューファイル名（例:
 ## 4. わざ
 - とくいわざ: §3「Azure Functions」「Event Grid」「Logic Apps」のうち、§2 エピソード「Functions でデモAPI即席」に裏付けあり → **Azure Functions** を選定
   - `azure-move-map.json` 参照 → 「イベントトリガー」採用、威力 85
-- ひでんわざ: §2「雑な相談大歓迎」「議論→デモ」の瞬間芸 → **「ハシリギメ」** を造語、発動条件「雑な相談を受けたとき」
+- ひでんわざ: §2「雑な相談大歓迎」「議論→デモ」の瞬間芸 → **「ハヤビギメ」** を造語、発動条件「雑な相談を受けたとき」
 
 ## 5. 弱点・耐性
 - 弱点: §1「終わりの見えない検討会」 → **「長い会議」**
@@ -226,7 +239,7 @@ argument-hint: 'input フォルダ内のインタビューファイル名（例:
 - colors: §5 似合う色「朱赤、晴れた朝」 → vermillion / morning-sky pale blue / ember
 - features: §5「羽の縁が朱色、足元に炎」 → wings trim + ember markings
 - negative: §5「AI画像で避けたい：人型、武器、写実猛禽の血、暗いトーン」をそのまま英訳
-- 推奨サイズ/品質: 1024x1024 / medium（既定の安定値）
+- 推奨サイズ/品質: 1024x1024 / low（カード用途の既定値）
 
 ## 文章トーンの注意
 - `caption` / `entries.*` / `flavor_quote` は、難しい設定資料のようにせず「やさしい図鑑文」で書く
@@ -247,7 +260,7 @@ argument-hint: 'input フォルダ内のインタビューファイル名（例:
 ### フォーマット
 
 ```markdown
-# 画像生成プロンプト: {生物名}（{連番}）
+# 画像生成プロンプト: {生物名}（{folder_name}）
 
 - 対象: {対象者の名前}（{所属・チーム名}）
 - 生物名: {primary_name} ／ 別名: {alias}
@@ -255,6 +268,7 @@ argument-hint: 'input フォルダ内のインタビューファイル名（例:
 - 推奨サイズ: {size} ／ 品質: {quality}
 - 出力ファイル想定: `creature.png`
 - 元データ: [params.json](./params.json) ／ [extraction-log.md](./extraction-log.md)
+- 元インタビュー: [source/{元インタビューファイル名}](./source/{元インタビューファイル名})
 
 ## プロンプト（gpt-image-2 にそのまま渡す）
 

@@ -214,6 +214,14 @@ main {
   line-height: 1;
 }
 
+.creature-alias {
+  margin: -2px 0 12px;
+  color: #3f5f7a;
+  font-size: 0.95rem;
+  font-weight: 800;
+  line-height: 1.45;
+}
+
 .taxonomy-strip {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));

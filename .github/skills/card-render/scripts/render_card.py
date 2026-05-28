@@ -1,10 +1,10 @@
 """params.json から いきもの図鑑カードの HTML を生成する CLI.
 
 使用例:
-    python render_card.py --params output/002_tanaka_taro/params.json \
-                          --out output/002_tanaka_taro/card.html
-    python render_card.py --params output/003_suzuki_tsubasa/params.json \
-                          --out output/003_suzuki_tsubasa/card.html \
+    python render_card.py --params output/260528143015_田中太郎/params.json \
+                          --out output/260528143015_田中太郎/card.html
+    python render_card.py --params output/260528143015_鈴木つばさ/params.json \
+                          --out output/260528143015_鈴木つばさ/card.html \
                           --image creature.png \
                           --css ../../reference/zukan-card.css
 
@@ -172,7 +172,6 @@ def render_entries(entries: dict) -> str:
 def render(params: dict, image_rel: str, css_text: str) -> str:
     trainer = params.get("trainer", {})
     creature = params.get("creature", {})
-    seq = params.get("sequence", "000")
     observed_date = str(params.get("observed_date", "") or "").strip()
     if not observed_date:
         observed_date = date.today().strftime("%Y/%m/%d")
@@ -218,6 +217,7 @@ def render(params: dict, image_rel: str, css_text: str) -> str:
         if observed_date
         else ""
     )
+    alias_html = f'<p class="creature-alias">別名：{esc(alias)}</p>' if alias else ""
 
     if not caption:
         caption = f"{real_name}{('（' + real_kana + '）') if real_kana else ''} の内面を架空のいきものとして描写。価値観・思考癖・仕事の進め方やこだわりを反映した内面生物。"
@@ -252,6 +252,7 @@ def render(params: dict, image_rel: str, css_text: str) -> str:
     <header class="field-guide-header">
       <span class="specimen-number">いきものファイル</span>
       <h3>{esc(primary_name)}</h3>
+    {alias_html}
       <div class="creature-meta-row">
         {type_badges}
         <span class="rarity-stars">{rarity_stars}</span>

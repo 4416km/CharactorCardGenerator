@@ -58,15 +58,22 @@ AZURE_OPENAI_IMAGE_MODEL=gpt-image-2
 input/インタビュー_空野ひかり.txt からカードを生成してください。
 ```
 
-Agent は必要に応じて `card-params-extract` / `gpt-image-2` / `card-render` / `card-pipeline` の各スキルを使い、`output/<folder>/` に生成物を保存します。
+Agent は必要に応じて `card-params-extract` / `gpt-image-2` / `card-render` / `card-pipeline` の各スキルを使い、`output/YYMMDDHHMMSS_<氏名漢字>/` に生成物を保存します。
+
+例: `output/260528143015_空野ひかり/`
+
+出力フォルダ名の先頭は生成時刻、末尾はインタビュー内の漢字氏名です。連番とローマ字名は使いません。
 
 生成される主なファイル:
 
 - `output/<folder>/params.json`
 - `output/<folder>/extraction-log.md`
 - `output/<folder>/image-prompt.md`
+- `output/<folder>/source/インタビュー_<氏名>.txt`
 - `output/<folder>/creature.png`
 - `output/<folder>/card.html`
+
+元インタビューも `source/` 配下にコピーされるため、人物ごとに別の場所へ退避・共有する場合は `output/<folder>/` を丸ごとコピーできます。
 
 ### CLI で続きの処理を実行する場合
 
@@ -98,7 +105,7 @@ python .github/skills/gpt-image-2/scripts/generate.py `
   --out output/<folder>/creature.png `
   --model <your-image-model> `
   --size 1024x1024 `
-  --quality medium
+  --quality low
 ```
 
 HTML 生成のみ:

@@ -1,6 +1,6 @@
 ---
 name: card-pipeline
-description: 'input/ 配下のインタビュー記録テキスト 1 件を起点に、パラメータ抽出 → 画像生成 → カード HTML レンダリングまでを一気通貫で実行する入口スキル。card-params-extract → gpt-image-2 → card-render の 3 ステップで、output/<###>_<name>/ に params.json / extraction-log.md / image-prompt.md / creature.png / card.html を揃える。WHEN: インタビューからカードを一気に作る、いきもの図鑑カードをエンドツーエンド生成、抽出から HTML までまとめて実行、いきもの図鑑のフル生成、ワンショットでカード化、人物ごとに一発でカードを作る。'
+description: 'input/ 配下のインタビュー記録テキスト 1 件を起点に、パラメータ抽出 → 画像生成 → カード HTML レンダリングまでを一気通貫で実行する入口スキル。card-params-extract → gpt-image-2 → card-render の 3 ステップで、output/YYMMDDHHMMSS_<氏名漢字>/ に params.json / extraction-log.md / image-prompt.md / source/インタビュー_*.txt / creature.png / card.html を揃える。WHEN: インタビューからカードを一気に作る、いきもの図鑑カードをエンドツーエンド生成、抽出から HTML までまとめて実行、いきもの図鑑のフル生成、ワンショットでカード化、人物ごとに一発でカードを作る。'
 argument-hint: 'input フォルダ内のインタビューファイル名（例: インタビュー_鈴木つばさ.txt）'
 ---
 
@@ -29,12 +29,13 @@ argument-hint: 'input フォルダ内のインタビューファイル名（例:
    - ファイルが無い場合はエラー停止。
 
 2. **ステップ A: パラメータ抽出**
-   - [card-params-extract](../card-params-extract/SKILL.md) の手順に従い、`output/<###>_<name>/` に以下を生成:
+   - [card-params-extract](../card-params-extract/SKILL.md) の手順に従い、`output/YYMMDDHHMMSS_<氏名漢字>/` に以下を生成:
      - `params.json`
      - `extraction-log.md`
      - `image-prompt.md`
+     - `source/<元インタビューファイル名>`
    - 必須項目欠落 / §5 画像材料 3 項目以上空欄 / わざ決定不能 などに該当する場合は、[card-params-extract](../card-params-extract/SKILL.md) §「追加質問の判定基準」に従い**ユーザーへ質問**してから先に進む（推測で埋めない）。
-   - 採番した `folder_name`（例: `003_suzuki_tsubasa`）を控える。
+  - 生成した `folder_name`（例: `260528143015_鈴木つばさ`）を控える。
 
 3. **ステップ B: 画像生成**
    - [gpt-image-2](../gpt-image-2/SKILL.md) の `generate.py` を呼ぶ:
@@ -43,7 +44,7 @@ argument-hint: 'input フォルダ内のインタビューファイル名（例:
        --prompt-file output/<folder>/image-prompt.md `
        --out output/<folder>/creature.png `
        --size 1024x1024 `
-       --quality medium
+      --quality low
      ```
    - `image-prompt.md` の中身は [card-params-extract](../card-params-extract/SKILL.md) がカード用途向けに構成したものをそのまま使う。
    - モデル選択・認証・API モード・失敗時の解釈は [gpt-image-2](../gpt-image-2/SKILL.md) の責務とし、本スキルでは扱わない。
@@ -70,16 +71,16 @@ argument-hint: 'input フォルダ内のインタビューファイル名（例:
 ```powershell
 # params.json 抽出後（=card-params-extract 実行後）に:
 python .github/skills/card-pipeline/scripts/build_card.py `
-  --folder output/003_suzuki_tsubasa
+  --folder output/260528143015_鈴木つばさ
 ```
 
 主要オプション:
 
 | 引数 | 既定値 | 説明 |
 |------|--------|------|
-| `--folder` | 必須 | 対象フォルダ（`output/<###>_<name>/`） |
+| `--folder` | 必須 | 対象フォルダ（`output/YYMMDDHHMMSS_<氏名漢字>/`） |
 | `--size` | `1024x1024` | 画像サイズ |
-| `--quality` | `medium` | 画像品質 |
+| `--quality` | `low` | 画像品質 |
 | `--force-image` | off | 既存 `creature.png` を上書き再生成 |
 | `--skip-image` | off | 画像生成をスキップして HTML のみ作る |
 
